@@ -2,7 +2,7 @@
 <!-- 不分级别同步文件日志输出配置 -->
 <configuration>
     <!-- 日志级别 -->
-    <property name="logLevel" value="ERROR"/>
+    <property name="logLevel" value="INFO"/>
     <!-- 日志地址 -->
     <property name="logPath" value="./logs"/>
     <!-- 最大保存时间 -->
@@ -44,7 +44,7 @@
 
 
     <!--配置mybatis sql 日志-->
-    <logger name="com.fjut.game.mapper" level="DEBUG"/>
+    <logger name="com.fjut.cf.mapper" level="DEBUG"/>
     <!-- 基于INFO处理日志：具体控制台或者文件对日志级别的处理还要看所在appender配置的filter，如果没有配置filter，则使用root配置 -->
     <root level="${logLevel}">
         <appender-ref ref="STDOUT" />

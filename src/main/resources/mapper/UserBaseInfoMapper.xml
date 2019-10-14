@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fjut.cf.mapper.UserBaseInfoMapper">
+
+    <insert id="insertUserBaseInfo">
+        INSERT INTO t_user_base_info
+        (id,
+        username,
+        nick,
+        gender,
+        email,
+        phone,
+        motto,
+        register_time,
+        rating,
+        ranking,
+        ac_num,
+        school,
+        faculty,
+        major,
+        cla,
+        student_id,
+        graduation_time
+        )
+        VALUES
+        (#{userBaseInfo.id},
+        #{userBaseInfo.username},
+        #{userBaseInfo.nick},
+        #{userBaseInfo.gender},
+        #{userBaseInfo.email},
+        #{userBaseInfo.phone},
+        #{userBaseInfo.motto},
+        #{userBaseInfo.registerTime},
+        #{userBaseInfo.rating},
+        #{userBaseInfo.ranking},
+        #{userBaseInfo.ac_num},
+        #{userBaseInfo.school},
+        #{userBaseInfo.faculty},
+        #{userBaseInfo.major},
+        #{userBaseInfo.cla},
+        #{userBaseInfo.studentId},
+        #{userBaseInfo.graduationTime}
+        );
+
+    </insert>
+
+
+    <delete id="deleteUserBaseInfoByUsername">
+        DELETE FROM t_user_base_info
+        WHERE username = #{username};
+    </delete>
+
+
+    <update id="updateUserBaseInfoByUsername">
+        UPDATE t_user_base_info
+        SET
+        id = #{userBaseInfo.id} ,
+        username = #{userBaseInfo.username} ,
+        nick = #{userBaseInfo.nick} ,
+        gender = #{userBaseInfo.gender} ,
+        email = #{userBaseInfo.email} ,
+        phone = #{userBaseInfo.phone} ,
+        motto = #{userBaseInfo.motto} ,
+        register_time = #{userBaseInfo.registerTime} ,
+        rating = #{userBaseInfo.rating} ,
+        ranking = #{userBaseInfo.ranking} ,
+        ac_num = #{userBaseInfo.ac_num} ,
+        school = #{userBaseInfo.school} ,
+        faculty = #{userBaseInfo.faculty} ,
+        major = #{userBaseInfo.major} ,
+        cla = #{userBaseInfo.cla} ,
+        student_id = #{userBaseInfo.studentId} ,
+        graduation_time = #{userBaseInfo.graduationTime}
+        WHERE
+        username = #{username} ;
+    </update>
+
+    <select id="queryAllUserBaseInfo" resultType="com.fjut.cf.pojo.UserBaseInfoPO">
+        SELECT *
+        FROM
+        t_user_base_info
+        LIMIT #{startIndex}, #{pageSize};
+    </select>
+
+    <select id="queryUserBaseInfoByUsername" resultType="com.fjut.cf.pojo.UserBaseInfoPO">
+        SELECT *
+        FROM
+        t_user_base_info
+        WHERE username = #{username}
+    </select>
+
+    <select id="queryUserBaseInfoCountByUsername" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        t_user_base_info
+        WHERE username = #{username}
+    </select>
+</mapper>

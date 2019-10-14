@@ -9,10 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.fjut</groupId>
-    <artifactId>game</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>game</name>
-    <description>It's a game :)</description>
+    <artifactId>cf</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <name>coding_first</name>
+    <description>It's CodingFirst :)</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -28,6 +29,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <!--打包的时候可以不用包进去，别的设施会提供。事实上该依赖理论上可以参与编译，测试，运行等周期。
+        相当于compile，但是打包阶段做了exclude操作-->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.0</version>
@@ -38,24 +46,28 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <!-- mysql 的依赖 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        <!-- redis的依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
         <!-- alibaba 的druid数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>RELEASE</version>
+            <version>1.1.18</version>
         </dependency>
         <!-- alibaba 的json格式化对象 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.31</version>
+            <version>1.2.39</version>
         </dependency>
         <!-- 自动生成API文档 -->
         <dependency>
@@ -77,6 +89,7 @@
     </dependencies>
 
     <build>
+        <finalName>cf</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

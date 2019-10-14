@@ -1,11 +1,11 @@
 server:
-  port: 8080
+  port: 8886
   servlet:
-    context-path: /game
+    context-path: /cf/
 
 spring:
   profiles:
-    active: prod
+    active: dev
   datasource:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
@@ -13,8 +13,6 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     # 驱动名字
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-
     # 扩展插件
     # 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
     filters: stat, wall
@@ -43,8 +41,19 @@ spring:
     # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
     maxOpenPreparedStatements: -1
 
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+    timeout: 2000
+
+
+
 mybatis:
   # mapper.xml包地址
   mapper-locations: classpath:mapper/*.xml
   # pojo生成包地址
-  type-aliases-package: com.fjut.game.pojo
+  type-aliases-package: com.fjut.cf.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+
