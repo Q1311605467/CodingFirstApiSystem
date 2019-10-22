@@ -24,7 +24,7 @@ public class UserBaseInfoPO {
     private String major;
     private String cla;
     private String studentId;
-    private Date graduationTime;
+    private String graduationYear;
 
     public Integer getId() {
         return id;
@@ -154,12 +154,12 @@ public class UserBaseInfoPO {
         this.studentId = studentId;
     }
 
-    public Date getGraduationTime() {
-        return graduationTime;
+    public String getGraduationYear() {
+        return graduationYear;
     }
 
-    public void setGraduationTime(Date graduationTime) {
-        this.graduationTime = graduationTime;
+    public void setGraduationYear(String graduationYear) {
+        this.graduationYear = graduationYear;
     }
 
     @Override
@@ -181,7 +181,7 @@ public class UserBaseInfoPO {
                 ", major='" + major + '\'' +
                 ", cla='" + cla + '\'' +
                 ", studentId='" + studentId + '\'' +
-                ", graduationTime=" + graduationTime +
+                ", graduationYear='" + graduationYear + '\'' +
                 '}';
     }
 }
