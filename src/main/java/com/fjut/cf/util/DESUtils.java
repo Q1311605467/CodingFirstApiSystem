@@ -1,16 +1,17 @@
 package com.fjut.cf.util;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SecureRandom;
 
 /**
- * DES 加解密工具类
+ * DES加密解密工具类
  *
- * @author axiang [2019/10/9]
+ * @author axiang [20190905]
  */
 public class DESUtils {
     private static Key DEFAULT_KEY;
@@ -25,7 +26,7 @@ public class DESUtils {
     /**
      * 加密解密格式
      */
-    private static final String format = "DES/ECB/PKCS5Padding";
+    private static final String FORMAT = "DES/ECB/PKCS5Padding";
 
     /**
      * 优先加载获得key
@@ -47,7 +48,7 @@ public class DESUtils {
             generator = KeyGenerator.getInstance(DES);
             //必须显式指定，防止linux下 随机生成key
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(key.getBytes("UTF-8"));
+            secureRandom.setSeed(key.getBytes(StandardCharsets.UTF_8));
             generator.init(secureRandom);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +100,7 @@ public class DESUtils {
         Cipher cipher;
         try {
             Key key1 = obtainKey(key);
-            cipher = Cipher.getInstance(format);
+            cipher = Cipher.getInstance(FORMAT);
             cipher.init(Cipher.ENCRYPT_MODE, key1);
             byteFina = cipher.doFinal(str);
         } catch (Exception e) {
@@ -117,7 +118,7 @@ public class DESUtils {
         byte[] byteFina = null;
         try {
             Key key1 = obtainKey(key);
-            cipher = Cipher.getInstance(format);
+            cipher = Cipher.getInstance(FORMAT);
             cipher.init(Cipher.DECRYPT_MODE, key1);
             byteFina = cipher.doFinal(str);
         } catch (Exception e) {

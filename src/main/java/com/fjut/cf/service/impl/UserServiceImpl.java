@@ -3,13 +3,16 @@ package com.fjut.cf.service.impl;
 import com.fjut.cf.mapper.UserAuthMapper;
 import com.fjut.cf.mapper.UserBaseInfoMapper;
 import com.fjut.cf.mapper.UserCustomInfoMapper;
+import com.fjut.cf.pojo.UserAuthPO;
 import com.fjut.cf.pojo.UserBaseInfoPO;
 import com.fjut.cf.pojo.UserCustomInfoPO;
 import com.fjut.cf.pojo.UserInfoVO;
 import com.fjut.cf.service.UserService;
 import com.fjut.cf.util.SHAUtils;
+import com.fjut.cf.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +30,30 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserCustomInfoMapper userCustomInfoMapper;
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Boolean registerUser(UserBaseInfoPO userBaseInfoPO, String password) {
+
+        UserAuthPO userAuthPO = new UserAuthPO();
+        Date currentTime = new Date();
+        // 得到随机盐值
+        String salt = UUIDUtils.getUUID32();
+        // 加盐密码
+        String newPassword = salt + password;
+        // 对加盐密码使用SHA1加密
+        String encryptedPwd = SHAUtils.SHA1(newPassword);
+        userAuthPO.setUsername(userBaseInfoPO.getUsername());
+        userAuthPO.setSalt(salt);
+        userAuthPO.setPassword(encryptedPwd);
+        userAuthPO.setAttemptLoginFailCount(0);
+        userAuthPO.setLocked(0);
+        userAuthPO.setUnlockTime(currentTime);
+        userAuthPO.setLastLoginTime(currentTime);
+        int ans1 = userBaseInfoMapper.insertUserBaseInfo(userBaseInfoPO);
+        int ans2 = userAuthMapper.insertUserAuth(userAuthPO);
+        return ans1 == 1 && ans2 == 1;
+    }
 
     @Override
     public Boolean doUserLogin(String username, String password) {

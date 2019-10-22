@@ -1,4 +1,4 @@
-package com.fjut.cf.redis;
+package com.fjut.cf.token;
 
 /**
  * Token的Model类

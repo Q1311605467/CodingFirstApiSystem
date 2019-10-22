@@ -11,16 +11,12 @@
         email,
         phone,
         motto,
-        register_time,
-        rating,
-        ranking,
-        ac_num,
         school,
         faculty,
         major,
         cla,
         student_id,
-        graduation_time
+        graduation_year
         )
         VALUES
         (#{userBaseInfo.id},
@@ -30,16 +26,12 @@
         #{userBaseInfo.email},
         #{userBaseInfo.phone},
         #{userBaseInfo.motto},
-        #{userBaseInfo.registerTime},
-        #{userBaseInfo.rating},
-        #{userBaseInfo.ranking},
-        #{userBaseInfo.ac_num},
         #{userBaseInfo.school},
         #{userBaseInfo.faculty},
         #{userBaseInfo.major},
         #{userBaseInfo.cla},
         #{userBaseInfo.studentId},
-        #{userBaseInfo.graduationTime}
+        #{userBaseInfo.graduationYear}
         );
 
     </insert>

@@ -12,6 +12,14 @@ import java.util.List;
 public interface UserService {
 
     /**
+     * 注册用户
+     * @param userBaseInfoPO
+     * @param password
+     * @return
+     */
+    Boolean registerUser(UserBaseInfoPO userBaseInfoPO, String password);
+
+    /**
      * 用户登录
      *
      * @param username
@@ -37,7 +45,7 @@ public interface UserService {
     Boolean queryUserExistByUsername(String username);
 
     /**
-     *查询用户的登录失败次数
+     * 查询用户的登录失败次数
      *
      * @param username
      * @return

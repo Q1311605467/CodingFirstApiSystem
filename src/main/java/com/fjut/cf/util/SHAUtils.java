@@ -5,9 +5,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 /**
- * SHA1加密
+ * SHA1加密工具类
  * 
- * @author axiang [20190828]
+ * @author axiang [2019/8/28]
  */
 public class SHAUtils {
     public static String SHA1(String str) {

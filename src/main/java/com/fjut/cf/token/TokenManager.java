@@ -1,10 +1,12 @@
-package com.fjut.cf.redis;
+package com.fjut.cf.token;
+
 
 /**
- * Redis操作类，封装了对Redis的一些操作
+ * token 操作 基类
  *
- * @author axiang [2019/7/5]
+ * @author axiang [2019/10/21]
  */
+
 public interface TokenManager {
 
     /**

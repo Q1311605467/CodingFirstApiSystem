@@ -11,3 +11,12 @@ spring:
 
 logging:
   config: classpath:conf/logback-dev-spring.xml
+
+com:
+  fjut:
+    cf:
+      localJudgePath: http://localhost:8100
+      baseFilePath: /app/file/
+      baseJudgeFilePath: /app/judge_system/judge_file/data/
+      picPath: pic/
+      picVerifyPath: pic/verify/

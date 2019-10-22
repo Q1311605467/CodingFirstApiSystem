@@ -2,6 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fjut.cf.mapper.UserCustomInfoMapper">
 
+    <insert id="insertUserCustomInfo">
+        INSERT INTO t_user_custom_info
+        (id,
+        username,
+        avatar_url,
+        adjective_title,
+        article_title
+        )
+        VALUES
+        (#{userCustomInfoPO.id},
+        #{userCustomInfoPO.username},
+        #{userCustomInfoPO.avatarUrl},
+        #{userCustomInfoPO.adjectiveTitle},
+        #{userCustomInfoPO.articleTitle}
+        );
+
+    </insert>
+
     <select id="queryUserCustomInfoByUsername" resultType="com.fjut.cf.pojo.UserCustomInfoPO">
         SELECT 	id,
         username,
@@ -10,6 +28,6 @@
         article_title
         FROM
         t_user_custom_info
-        WHERE username = #{username}
+        WHERE username = #{username};
     </select>
 </mapper>
