@@ -18,8 +18,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private String title = "FJUT Game项目接口文档";
-    private String description = "FJUT game项目接口文档";
+    private String title = "“一码当先” 项目接口文档";
+    private String description = "“一码当先” 项目接口文档，Spring boot重构版";
     private String version = "1.0.0";
     private String termsOfServiceUrl = "";
     private String license = "";
