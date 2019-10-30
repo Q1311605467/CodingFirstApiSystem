@@ -1,6 +1,6 @@
 package com.fjut.cf.mapper;
 
-import com.fjut.cf.pojo.UserPermissionPO;
+import com.fjut.cf.pojo.po.UserPermissionPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

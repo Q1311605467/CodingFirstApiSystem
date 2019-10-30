@@ -1,5 +1,6 @@
 package com.fjut.cf.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,6 +19,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
+    /**
+     * 关闭 swagger
+     */
+    @Value("${cf.config.swagger.enable}")
+    private boolean enableSwagger;
+
     private String title = "“一码当先” 项目接口文档";
     private String description = "“一码当先” 项目接口文档，Spring boot重构版";
     private String version = "1.0.0";
@@ -27,12 +35,23 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.fjut.cf.controller"))
-                .paths(PathSelectors.any())
-                .build();
+        // 允许开启swagger
+        if (enableSwagger) {
+            return new Docket(DocumentationType.SWAGGER_2)
+                    .apiInfo(apiInfo())
+                    .select()
+                    .apis(RequestHandlerSelectors.basePackage("com.fjut.cf.controller"))
+                    .paths(PathSelectors.any())
+                    .build();
+        } else {
+            return new Docket(DocumentationType.SWAGGER_2)
+                    .apiInfo(apiInfo())
+                    .select()
+                    .paths(PathSelectors.none())
+                    .build();
+        }
+
+
     }
 
     private ApiInfo apiInfo() {
@@ -45,4 +64,5 @@ public class SwaggerConfig {
                 .licenseUrl(licenseUrl)
                 .build();
     }
+
 }

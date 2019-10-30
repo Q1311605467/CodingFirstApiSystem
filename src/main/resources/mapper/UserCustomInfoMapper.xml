@@ -20,7 +20,7 @@
 
     </insert>
 
-    <select id="queryUserCustomInfoByUsername" resultType="com.fjut.cf.pojo.UserCustomInfoPO">
+    <select id="queryUserCustomInfoByUsername" resultType="com.fjut.cf.pojo.po.UserCustomInfoPO">
         SELECT 	id,
         username,
         avatar_url,

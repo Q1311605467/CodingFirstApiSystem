@@ -2,11 +2,15 @@ package com.fjut.cf.service.impl;
 
 import com.fjut.cf.mapper.UserAuthMapper;
 import com.fjut.cf.mapper.UserBaseInfoMapper;
+import com.fjut.cf.mapper.UserCheckInMapper;
 import com.fjut.cf.mapper.UserCustomInfoMapper;
-import com.fjut.cf.pojo.UserAuthPO;
-import com.fjut.cf.pojo.UserBaseInfoPO;
-import com.fjut.cf.pojo.UserCustomInfoPO;
-import com.fjut.cf.pojo.UserInfoVO;
+import com.fjut.cf.pojo.po.UserAuthPO;
+import com.fjut.cf.pojo.po.UserBaseInfoPO;
+import com.fjut.cf.pojo.po.UserCustomInfoPO;
+import com.fjut.cf.pojo.vo.UserAcNumBorderVO;
+import com.fjut.cf.pojo.vo.UserAcbBorderVO;
+import com.fjut.cf.pojo.vo.UserInfoVO;
+import com.fjut.cf.pojo.vo.UserRatingBorderVO;
 import com.fjut.cf.service.UserService;
 import com.fjut.cf.util.SHAUtils;
 import com.fjut.cf.util.UUIDUtils;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserCustomInfoMapper userCustomInfoMapper;
+
+    @Autowired
+    UserCheckInMapper userCheckInMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -119,4 +127,48 @@ public class UserServiceImpl implements UserService {
         userInfoVO.setUserCustomInfoPO(userCustomInfoPO);
         return userInfoVO;
     }
+
+    @Override
+    public List<UserAcbBorderVO> queryAcbBorder(int startIndex, int pageSize) {
+        List<UserAcbBorderVO> userAcbBorderVOS = new ArrayList<>();
+        List<UserBaseInfoPO> userBaseInfoPOS = userBaseInfoMapper.queryAcbTopDescLimit(startIndex, pageSize);
+        for (UserBaseInfoPO userBase : userBaseInfoPOS) {
+            UserAcbBorderVO userAcbBorderVO = new UserAcbBorderVO();
+            userAcbBorderVO.setUsername(userBase.getUsername());
+            userAcbBorderVO.setNick(userBase.getNick());
+            userAcbBorderVO.setAcb(userBase.getAcb());
+            userAcbBorderVOS.add(userAcbBorderVO);
+        }
+        return userAcbBorderVOS;
+    }
+
+    @Override
+    public List<UserAcNumBorderVO> queryAcNumBorder(int startIndex, int pageSize) {
+        List<UserAcNumBorderVO> userAcNumBorderVOS = new ArrayList<>();
+        List<UserBaseInfoPO> userBaseInfoPOS = userBaseInfoMapper.queryAcNumTopDescLimit(startIndex, pageSize);
+        for (UserBaseInfoPO userBase : userBaseInfoPOS) {
+            UserAcNumBorderVO userAcbBorderVO = new UserAcNumBorderVO();
+            userAcbBorderVO.setUsername(userBase.getUsername());
+            userAcbBorderVO.setNick(userBase.getNick());
+            userAcbBorderVO.setAcNum(userBase.getAcNum());
+            userAcNumBorderVOS.add(userAcbBorderVO);
+        }
+        return userAcNumBorderVOS;
+    }
+
+    @Override
+    public List<UserRatingBorderVO> queryRatingBorder(int startIndex, int pageSize) {
+        List<UserRatingBorderVO> userRatingBorderVOS = new ArrayList<>();
+        List<UserBaseInfoPO> userBaseInfoPOS = userBaseInfoMapper.queryRatingTopDescLimit(startIndex, pageSize);
+        for (UserBaseInfoPO userBase : userBaseInfoPOS) {
+            UserRatingBorderVO userRatingBorderVO = new UserRatingBorderVO();
+            userRatingBorderVO.setUsername(userBase.getUsername());
+            userRatingBorderVO.setNick(userBase.getNick());
+            userRatingBorderVO.setRating(userBase.getRating());
+            userRatingBorderVOS.add(userRatingBorderVO);
+        }
+        return userRatingBorderVOS;
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package com.fjut.cf.mapper;
 
-import com.fjut.cf.pojo.UserBaseInfoPO;
+import com.fjut.cf.pojo.po.UserBaseInfoPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -58,4 +58,31 @@ public interface UserBaseInfoMapper {
      * @return
      */
     Integer queryUserBaseInfoCountByUsername(@Param("username") String username);
+
+    /**
+     * 分页查询ACB榜单
+     *
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<UserBaseInfoPO> queryAcbTopDescLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 分页查询AC题数榜单
+     *
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<UserBaseInfoPO> queryAcNumTopDescLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 分页查询积分榜单
+     *
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<UserBaseInfoPO> queryRatingTopDescLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 }

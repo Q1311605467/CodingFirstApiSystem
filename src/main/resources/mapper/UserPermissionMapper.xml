@@ -19,7 +19,7 @@
         );
     </insert>
 
-    <select id="queryAllUserPermissionByUsername" resultType="com.fjut.cf.pojo.UserPermissionPO">
+    <select id="queryAllUserPermissionByUsername" resultType="com.fjut.cf.pojo.po.UserPermissionPO">
         SELECT 	id,
             username,
             permission_id,

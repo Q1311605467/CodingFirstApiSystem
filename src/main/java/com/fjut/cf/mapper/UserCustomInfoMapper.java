@@ -1,6 +1,6 @@
 package com.fjut.cf.mapper;
 
-import com.fjut.cf.pojo.UserCustomInfoPO;
+import com.fjut.cf.pojo.po.UserCustomInfoPO;
 import org.apache.ibatis.annotations.Param;
 
 /**

@@ -1,6 +1,6 @@
 package com.fjut.cf.mapper;
 
-import com.fjut.cf.pojo.UserAuthPO;
+import com.fjut.cf.pojo.po.UserAuthPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

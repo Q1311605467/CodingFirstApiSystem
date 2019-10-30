@@ -1,9 +1,12 @@
 package com.fjut.cf.controller;
 
-import com.fjut.cf.pojo.ResultJsonVO;
-import com.fjut.cf.redis.RedisUtils;
-import com.fjut.cf.token.TokenManager;
-import com.fjut.cf.token.TokenModel;
+import com.fjut.cf.component.email.EmailTool;
+import com.fjut.cf.component.judge.local.LocalJudgeHttpClient;
+import com.fjut.cf.pojo.po.LocalJudgeSubmitInfoPO;
+import com.fjut.cf.pojo.vo.ResultJsonVO;
+import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.component.redis.RedisUtils;
+import com.fjut.cf.component.token.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,18 +24,29 @@ public class TestController {
     @Autowired
     TokenManager tokenManager;
 
-    @GetMapping("/test")
-    public ResultJsonVO testMethod()
-    {
-        TokenModel axiang = tokenManager.createToken("axiang");
-        String auth = tokenManager.createAuth(axiang);
-        TokenModel tokenModel = tokenManager.getToken(auth);
-        System.out.println(auth);
-        System.out.println(tokenModel.getUsername());
-        System.out.println(tokenModel.getToken());
-        boolean b = tokenManager.checkToken(tokenModel);
-        System.out.println(b);
+    @Autowired
+    LocalJudgeHttpClient localJudgeHttpClient;
 
-        return new ResultJsonVO();
+    @GetMapping("/test")
+    public ResultJsonVO testMethod() {
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        LocalJudgeSubmitInfoPO localJudgeSubmitInfo = new LocalJudgeSubmitInfoPO();
+        localJudgeSubmitInfo.setPid(1000);
+        localJudgeSubmitInfo.setRid(12345);
+        localJudgeSubmitInfo.setCode("#include<stdio.h>");
+        localJudgeSubmitInfo.setLanguageId(0);
+        localJudgeSubmitInfo.setMemoryLimit(1000);
+        localJudgeSubmitInfo.setTimeLimit(1000);
+        localJudgeSubmitInfo.setType("submit");
+        String s = localJudgeHttpClient.submitToLocalJudge(localJudgeSubmitInfo);
+        resultJsonVO.addInfo(s);
+        return resultJsonVO;
+    }
+
+    @GetMapping("/test1")
+    public ResultJsonVO testMethod1() throws Exception {
+        EmailTool emailTool = new EmailTool();
+        emailTool.sendSimpleMailTest();
+        return new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS,"hhh");
     }
 }

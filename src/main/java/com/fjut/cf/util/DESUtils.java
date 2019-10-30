@@ -11,7 +11,7 @@ import java.security.SecureRandom;
 /**
  * DES加密解密工具类
  *
- * @author axiang [20190905]
+ * @author axiang [2019/09/05]
  */
 public class DESUtils {
     private static Key DEFAULT_KEY;

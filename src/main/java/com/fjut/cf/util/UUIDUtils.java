@@ -3,7 +3,7 @@ package com.fjut.cf.util;
 import java.util.UUID;
 
 /**
- * @author axiang [a20190827]
+ * @author axiang [2019/08/27]
  */
 public class UUIDUtils {
     private static String[] chars = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",

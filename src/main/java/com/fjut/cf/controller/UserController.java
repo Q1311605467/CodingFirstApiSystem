@@ -1,34 +1,41 @@
 package com.fjut.cf.controller;
 
-import com.fjut.cf.interceptor.LoginRequired;
-import com.fjut.cf.pojo.ResultJsonVO;
-import com.fjut.cf.pojo.UserBaseInfoPO;
-import com.fjut.cf.pojo.UserInfoVO;
+import com.fjut.cf.component.interceptor.LoginRequired;
+import com.fjut.cf.component.interceptor.PrivateRequired;
+import com.fjut.cf.pojo.vo.*;
+import com.fjut.cf.pojo.po.UserBaseInfoPO;
+import com.fjut.cf.pojo.po.UserCheckInPO;
 import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.service.UserCheckInService;
 import com.fjut.cf.service.UserService;
-import com.fjut.cf.token.TokenManager;
-import com.fjut.cf.token.TokenModel;
+import com.fjut.cf.component.token.TokenManager;
+import com.fjut.cf.component.token.TokenModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author axiang [2019/10/11]
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
     @Autowired
     UserService userService;
 
     @Autowired
+    UserCheckInService userCheckInService;
+
+    @Autowired
     TokenManager tokenManager;
 
     @PostMapping("/login")
-    public ResultJsonVO userLogin(@RequestParam("username") String username,
-                                  @RequestParam("password") String password) {
+    public ResultJsonVO postUserLogin(@RequestParam("username") String username,
+                                      @RequestParam("password") String password) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         Date currentDate = new Date();
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
@@ -61,26 +68,25 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResultJsonVO userRegister(@RequestParam("username") String username,
-                                     @RequestParam("password") String password,
-                                     @RequestParam("nick") String nick,
-                                     @RequestParam(value = "gender", required = false) Integer gender,
-                                     @RequestParam("email") String email,
-                                     @RequestParam("phone") String phone,
-                                     @RequestParam("motto") String motto,
-                                     @RequestParam(value = "school", required = false) String school,
-                                     @RequestParam(value = "faculty", required = false) String faculty,
-                                     @RequestParam(value = "major", required = false) String major,
-                                     @RequestParam(value = "cla", required = false) String cla,
-                                     @RequestParam(value = "studentId", required = false) String studentId,
-                                     @RequestParam(value = "graduationDate", required = false) String graduationDateStr
-                                     ) {
+    public ResultJsonVO postUserRegister(@RequestParam("username") String username,
+                                         @RequestParam("password") String password,
+                                         @RequestParam("nick") String nick,
+                                         @RequestParam(value = "gender", required = false) Integer gender,
+                                         @RequestParam("email") String email,
+                                         @RequestParam("phone") String phone,
+                                         @RequestParam("motto") String motto,
+                                         @RequestParam(value = "school", required = false) String school,
+                                         @RequestParam(value = "faculty", required = false) String faculty,
+                                         @RequestParam(value = "major", required = false) String major,
+                                         @RequestParam(value = "cla", required = false) String cla,
+                                         @RequestParam(value = "studentId", required = false) String studentId,
+                                         @RequestParam(value = "graduationDate", required = false) String graduationDateStr
+    ) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         Boolean isExist = userService.queryUserExistByUsername(username);
-        if(isExist)
-        {
-           resultJsonVO.setStatus(ResultJsonCode.SYSTEM_ERROR, "注册的用户已存在！");
-           return resultJsonVO;
+        if (isExist) {
+            resultJsonVO.setStatus(ResultJsonCode.SYSTEM_ERROR, "注册的用户已存在！");
+            return resultJsonVO;
         }
         UserBaseInfoPO userBaseInfo = new UserBaseInfoPO();
         userBaseInfo.setUsername(username);
@@ -97,17 +103,15 @@ public class UserController {
         userBaseInfo.setStudentId(studentId);
         userBaseInfo.setGraduationYear(graduationDateStr);
         Boolean ans = userService.registerUser(userBaseInfo, password);
-        if(ans)
-        {
+        if (ans) {
             resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS, "用户注册成功！");
-        }
-        else{
+        } else {
             resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "用户注册失败！");
         }
         return resultJsonVO;
     }
 
-    @GetMapping("/get")
+    @GetMapping("/info/get")
     @LoginRequired
     public ResultJsonVO getUserInfoByUsername(@RequestParam("username") String username) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
@@ -115,4 +119,42 @@ public class UserController {
         resultJsonVO.addInfo(userInfoVO);
         return resultJsonVO;
     }
+
+    @GetMapping("/check_in/get")
+    @PrivateRequired
+    public ResultJsonVO getUserCheckInByUsername(@RequestParam("username") String username,
+                                                 @RequestParam("pageNum") Integer pageNum,
+                                                 @RequestParam("pageSize") Integer pageSize) {
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        if (pageNum == null) {
+            pageNum = 0;
+        }
+        if (pageSize == null) {
+            pageSize = 30;
+        }
+        Integer startIndex = (pageNum - 1) * pageSize;
+        List<UserCheckInPO> userCheckInPOS = userCheckInService.queryUserCheckInByUsername(username, startIndex, pageSize);
+        resultJsonVO.addInfo(userCheckInPOS);
+        return resultJsonVO;
+    }
+
+    @GetMapping("/border/get")
+    public ResultJsonVO getUserBorder(@RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("pageSize") Integer pageSize) {
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        Integer startIndex = (pageNum - 1) * pageSize;
+        List<UserRatingBorderVO> userRatingBorderVOS = userService.queryRatingBorder(startIndex, pageSize);
+        List<UserAcNumBorderVO> userAcNumBorderVOS = userService.queryAcNumBorder(startIndex, pageSize);
+        List<UserAcbBorderVO> userAcbBorderVOS = userService.queryAcbBorder(startIndex, pageSize);
+        resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
+        resultJsonVO.addInfo(userRatingBorderVOS);
+        resultJsonVO.addInfo(userAcNumBorderVOS);
+        resultJsonVO.addInfo(userAcbBorderVOS);
+        return resultJsonVO;
+    }
+
 }
+
+
+
+

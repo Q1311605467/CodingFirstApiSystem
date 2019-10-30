@@ -67,14 +67,14 @@
         username = #{username} ;
     </update>
 
-    <select id="queryAllUserBaseInfo" resultType="com.fjut.cf.pojo.UserBaseInfoPO">
+    <select id="queryAllUserBaseInfo" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
         SELECT *
         FROM
         t_user_base_info
         LIMIT #{startIndex}, #{pageSize};
     </select>
 
-    <select id="queryUserBaseInfoByUsername" resultType="com.fjut.cf.pojo.UserBaseInfoPO">
+    <select id="queryUserBaseInfoByUsername" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
         SELECT *
         FROM
         t_user_base_info
@@ -86,5 +86,32 @@
         FROM
         t_user_base_info
         WHERE username = #{username}
+    </select>
+
+    <select id="queryAcbTopDescLimit" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
+        SELECT username,
+        nick,
+        acb
+        FROM t_user_base_info
+        ORDER BY acb DESC, rating DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="queryAcNumTopDescLimit" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
+        SELECT username,
+        nick,
+        ac_num
+        FROM t_user_base_info
+        ORDER BY ac_num DESC, rating DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="queryRatingTopDescLimit" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
+        SELECT username,
+        nick,
+        rating
+        FROM t_user_base_info
+        ORDER BY rating DESC
+        LIMIT #{startIndex}, #{pageSize}
     </select>
 </mapper>

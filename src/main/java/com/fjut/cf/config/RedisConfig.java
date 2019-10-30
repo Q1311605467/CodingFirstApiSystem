@@ -36,10 +36,12 @@ public class RedisConfig {
         template.setValueSerializer(stringRedisSerializer);
         // hash的value序列化方式采用 String
         template.setHashValueSerializer(stringRedisSerializer);
+
 //        // value序列化方式采用jackson
 //        template.setValueSerializer(jackson2JsonRedisSerializer);
 //        // hash的value序列化方式采用jackson
 //        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+
         template.afterPropertiesSet();
         return template;
 

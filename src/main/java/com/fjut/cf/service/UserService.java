@@ -1,7 +1,10 @@
 package com.fjut.cf.service;
 
-import com.fjut.cf.pojo.UserBaseInfoPO;
-import com.fjut.cf.pojo.UserInfoVO;
+import com.fjut.cf.pojo.po.UserBaseInfoPO;
+import com.fjut.cf.pojo.vo.UserAcNumBorderVO;
+import com.fjut.cf.pojo.vo.UserAcbBorderVO;
+import com.fjut.cf.pojo.vo.UserInfoVO;
+import com.fjut.cf.pojo.vo.UserRatingBorderVO;
 
 import java.util.Date;
 import java.util.List;
@@ -10,9 +13,9 @@ import java.util.List;
  * @author axiang [2019/10/11]
  */
 public interface UserService {
-
     /**
      * 注册用户
+     *
      * @param userBaseInfoPO
      * @param password
      * @return
@@ -69,6 +72,34 @@ public interface UserService {
      * @return
      */
     UserInfoVO queryUserInfoByUsername(String username);
+
+    /**
+     * 查询ACB榜单
+     *
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<UserAcbBorderVO> queryAcbBorder(int startIndex, int pageSize);
+
+    /**
+     * 查询AC题数榜单
+     *
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<UserAcNumBorderVO> queryAcNumBorder(int startIndex, int pageSize);
+
+    /**
+     * 查询积分榜单
+     *
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<UserRatingBorderVO> queryRatingBorder(int startIndex, int pageSize);
+
 
 
 }

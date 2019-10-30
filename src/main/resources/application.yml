@@ -1,11 +1,14 @@
 server:
   port: 8886
   servlet:
-    context-path: /cf/
+    context-path: /cf
 
 spring:
   profiles:
     active: dev
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
   datasource:
     # 如果存在多个数据源，监控的时候可以通过名字来区分开来
     name: mysql
@@ -45,7 +48,23 @@ spring:
     database: 1
     host: 127.0.0.1
     port: 6379
-    timeout: 2000
+    timeout: 10000
+    jedis:
+      pool:
+        max-idle: 20
+        min-idle: 5
+        max-active: -1
+        max-wait: -1
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
 
 mybatis:
   # mapper.xml包地址
