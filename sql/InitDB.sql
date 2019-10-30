@@ -1,8 +1,14 @@
+# 测试库
+# DROP DATABASE IF EXISTS cf_test;
+# CREATE DATABASE cf_test;
+# USE cf_test;
+
+### ------------------------------------------------------------------------------------------ ###
+
+# 生产库
 # DROP DATABASE IF EXISTS coding_first;
-
-CREATE DATABASE coding_first;
-
-USE coding_first;
+# CREATE DATABASE coding_first;
+# USE coding_first;
 
 ### ------------------------------------------------------------------------------------------ ###
 
@@ -16,8 +22,8 @@ CREATE TABLE `t_system_info`
 );
 
 # 系统日志表
-DROP TABLE IF EXISTS `t_system_log`;
-CREATE TABLE `t_system_log`
+DROP TABLE IF EXISTS `t_log`;
+CREATE TABLE `t_log`
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,
     level      VARCHAR(10) DEFAULT 'default'
@@ -66,6 +72,7 @@ CREATE TABLE `t_user_base_info`
     rating          INT         NOT NULL DEFAULT 0 COMMENT '评分',
     ranking         INT         NOT NULL DEFAULT 0 COMMENT '排行',
     ac_num          INT         NOT NULL DEFAULT 0 COMMENT 'AC题数',
+    acb             INT         NOT NULL DEFAULT 0 COMMENT 'ACB数量',
     school          VARCHAR(20) COMMENT '学校',
     faculty         VARCHAR(20) COMMENT '学院',
     major           VARCHAR(20) COMMENT '专业',
@@ -182,8 +189,7 @@ CREATE TABLE `t_problem_view`
     spj          TINYINT(1)  NOT NULL COMMENT '特判标记, 0：不是，1：是',
     description  TEXT        NOT NULL COMMENT '题目描述',
     input        TEXT        NOT NULL COMMENT '输入',
-    output       TEXT        NOT NULL COMMENT '输出',
-    FOREIGN KEY (problem_id) REFERENCES t_problem_info (problem_id)
+    output       TEXT        NOT NULL COMMENT '输出'
 );
 
 # 题目样例表
@@ -191,10 +197,10 @@ DROP TABLE IF EXISTS `t_problem_sample`;
 CREATE TABLE `t_problem_sample`
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
-    problem_id  INT UNIQUE,
+    problem_id  INT,
+    case_order  INT COMMENT '样例顺序',
     input_case  TEXT NOT NULL COMMENT '输入样例',
-    output_case TEXT NOT NULL COMMENT '输出样例',
-    FOREIGN KEY (problem_id) REFERENCES t_problem_info (problem_id)
+    output_case TEXT NOT NULL COMMENT '输出样例'
 );
 
 # 题目难度表
@@ -203,8 +209,7 @@ CREATE TABLE `t_problem_difficult`
 (
     id              INT PRIMARY KEY AUTO_INCREMENT,
     problem_id      INT UNIQUE,
-    difficult_level SMALLINT DEFAULT NULL COMMENT '难度级别 1~3 ，越高越难',
-    FOREIGN KEY (problem_id) REFERENCES t_problem_info (problem_id)
+    difficult_level SMALLINT DEFAULT NULL COMMENT '难度级别 1~3 ，越高越难'
 );
 
 # 题目标签表
@@ -224,6 +229,7 @@ CREATE TABLE `t_problem_tag_record`
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,
     username   VARCHAR(30) NOT NULL,
+    problem_id INT         NOT NULL COMMENT '题目ID',
     tag_id     INT         NOT NULL,
     time       DATETIME DEFAULT NOW() COMMENT '贴标签时间',
     confidence DOUBLE   DEFAULT 0 COMMENT '标签置信度'
@@ -249,25 +255,25 @@ CREATE TABLE `t_contest_info`
     id                  INT PRIMARY KEY AUTO_INCREMENT,
     contest_id          INT UNIQUE COMMENT '比赛编号',
     contest_kind        INT COMMENT '比赛类型： 0：练习；1：积分；2：趣味；3：正式；4：隐藏；5：DIY',
-    title               VARCHAR(30) NOT NULL COMMENT '比赛标题',
-    description         TEXT        NOT NULL COMMENT '比赛介绍',
+    title               VARCHAR(100) NOT NULL COMMENT '比赛标题',
+    description         TEXT         NOT NULL COMMENT '比赛介绍',
     create_user         VARCHAR(30) COMMENT '比赛开设人',
-    create_time         DATETIME             DEFAULT NOW() COMMENT '比赛创建时间',
-    begin_time          DATETIME    NOT NULL COMMENT '比赛开始时间',
-    end_time            DATETIME    NOT NULL COMMENT '比赛结束时间',
-    permission_type     INT         NOT NULL DEFAULT 0
+    create_time         DATETIME              DEFAULT NOW() COMMENT '比赛创建时间',
+    begin_time          DATETIME     NOT NULL COMMENT '比赛开始时间',
+    end_time            DATETIME     NOT NULL COMMENT '比赛结束时间',
+    permission_type     INT          NOT NULL DEFAULT 0
         COMMENT '权限类型： 0：公开；1：密码；2：私有；3：注册；4：正式；5：组队',
     password            VARCHAR(16) COMMENT '需要密码时的密码',
     register_begin_time DATETIME COMMENT '需要注册参赛信息时的注册开始时间',
     register_end_time   DATETIME COMMENT '需要注册参赛信息时的注册结束时间',
-    computer_rating     TINYINT(1)           DEFAULT 0 COMMENT '是否计算积分',
-    rank_type           INT         NOT NULL COMMENT '计分方式',
-    problem_put_tag     TINYINT(1)           DEFAULT 1
+    computer_rating     TINYINT(1)            DEFAULT 0 COMMENT '是否计算积分',
+    rank_type           INT          NOT NULL COMMENT '计分方式',
+    problem_put_tag     TINYINT(1)            DEFAULT 1
         COMMENT '题目是否可以贴标签： 0：不可以，1：可以，定义同下',
-    status_read_out     TINYINT(1)           DEFAULT 1 COMMENT '是否可以查看评测列表',
-    show_register_list  TINYINT(1)           DEFAULT 1 COMMENT '展示注册名单',
-    show_border_list    TINYINT(1)           DEFAULT 1 COMMENT '展示比赛版单',
-    show_other_status   TINYINT(1)           DEFAULT 1 COMMENT '展示别人的代码',
+    status_read_out     TINYINT(1)            DEFAULT 1 COMMENT '是否可以查看评测列表',
+    show_register_list  TINYINT(1)            DEFAULT 1 COMMENT '展示注册名单',
+    show_border_list    TINYINT(1)            DEFAULT 1 COMMENT '展示比赛版单',
+    show_other_status   TINYINT(1)            DEFAULT 1 COMMENT '展示别人的代码',
     INDEX (create_user)
 );
 
@@ -278,9 +284,7 @@ CREATE TABLE `t_contest_problem`
     id            INT PRIMARY KEY AUTO_INCREMENT,
     contest_id    INT COMMENT '比赛编号',
     problem_id    INT COMMENT '题目的题号',
-    problem_order INT COMMENT '题目在比赛内的顺序',
-    FOREIGN KEY (contest_id) REFERENCES t_contest_info (contest_id),
-    FOREIGN KEY (problem_id) REFERENCES t_problem_info (problem_id)
+    problem_order INT COMMENT '题目在比赛内的顺序'
 );
 
 # 比赛注册成员表
@@ -294,7 +298,7 @@ CREATE TABLE `t_contest_register_user`
     review_status SMALLINT DEFAULT 0 COMMENT '审核是否通过: 0:还未审核；1：审核通过；2：审核失败',
     review_info   VARCHAR(255) COMMENT '审核反馈信息',
     review_time   DATETIME COMMENT '审核时间',
-    FOREIGN KEY (contest_id) REFERENCES t_contest_info (contest_id),
+    INDEX (contest_id),
     INDEX (username)
 );
 
@@ -316,8 +320,8 @@ CREATE TABLE `t_judge_status`
     memory_used VARCHAR(10) NOT NULL COMMENT '内存消耗',
     code        TEXT        NOT NULL COMMENT '评测代码',
     code_length INT         NOT NULL COMMENT '代码长度',
-    FOREIGN KEY (problem_id) REFERENCES t_problem_info (problem_id),
-    FOREIGN KEY (contest_id) REFERENCES t_contest_info (contest_id),
+    INDEX (problem_id),
+    INDEX (contest_id),
     INDEX (username),
     INDEX (result),
     INDEX (language)
@@ -330,7 +334,7 @@ CREATE TABLE `t_judge_result`
     id       INT PRIMARY KEY AUTO_INCREMENT,
     judge_id INT COMMENT '评测ID',
     info     MEDIUMTEXT NOT NULL COMMENT '评测返回的结果',
-    FOREIGN KEY (judge_id) REFERENCES t_judge_status (id)
+    INDEX (judge_id)
 );
 
 ### ------------------------------------------------------------------------------------------ ###
@@ -353,7 +357,7 @@ CREATE TABLE `t_challenge_block_problem`
     block_id      INT NOT NULL COMMENT '挑战模式模块ID',
     problem_order INT NOT NULL COMMENT '模块内的题目顺序',
     problem_id    INT NOT NULL COMMENT '题目ID',
-    total_score   INT NOT NULL DEFAULT 0 COMMENT '题目分值',
+    score         INT NOT NULL DEFAULT 0 COMMENT '题目分值',
     reward_acb    INT NOT NULL DEFAULT 0 COMMENT '解锁后奖励ACB'
 );
 
@@ -446,7 +450,7 @@ CREATE TABLE `t_mall_goods`
     goods_type       SMALLINT COMMENT '商品大类类型：1.实体物品；2：虚拟物品',
     stock            INT         NOT NULL DEFAULT -1 COMMENT '库存数量，-1为不限量',
     description      TEXT        NOT NULL COMMENT '商品介绍',
-    picture_url      VARCHAR(2047) COMMENT '图片url地址',
+    picture_url      TEXT COMMENT '图片url地址',
     visible          TINYINT              DEFAULT 1 COMMENT '普通用户是否可见：0：不可见；1：可见',
     shelf_user       VARCHAR(30) COMMENT '上传用户',
     shelf_time       DATETIME             DEFAULT NOW() COMMENT '上架时间',
