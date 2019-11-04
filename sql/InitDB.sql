@@ -488,3 +488,25 @@ CREATE TABLE `t_acb_record`
 );
 
 ### ------------------------------------------------------------------------------------------ ###
+
+# 评测列表视图
+CREATE VIEW v_judge_status
+AS
+SELECT tjs.id,
+       tubi.nick,
+       tjs.username,
+       tjs.problem_id,
+       tjs.contest_id,
+       tjs.language,
+       tjs.submit_time,
+       tjs.result,
+       tjs.score,
+       tjs.time_used,
+       tjs.memory_used,
+       tjs.code,
+       tjs.code_length
+FROM t_judge_status tjs
+         LEFT JOIN t_user_base_info tubi
+                   ON tjs.username = tubi.username
+ORDER BY tjs.id DESC
+

@@ -1,6 +1,7 @@
 package com.fjut.cf.controller;
 
 import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.pojo.vo.JudgeStatusVO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.pojo.vo.StatusCountVO;
 import com.fjut.cf.service.JudgeStatusService;
@@ -18,6 +19,25 @@ import java.util.*;
 public class JudgeStatusController {
     @Autowired
     JudgeStatusService judgeStatusService;
+
+    @GetMapping("/list/get")
+    public ResultJsonVO getStatusList(@RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("pageSize") Integer pageSize) {
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        if (null == pageNum) {
+            pageNum = 1;
+        }
+        if (null == pageSize) {
+            pageSize = 50;
+        }
+        Integer startIndex = (pageNum - 1) * pageSize;
+        List<JudgeStatusVO> judgeStatusVOS = judgeStatusService.queryJudgeStatusDescLimit(startIndex, pageSize);
+        Integer length = judgeStatusService.queryViewJudgeStatusCount();
+        resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
+        resultJsonVO.addInfo(judgeStatusVOS);
+        resultJsonVO.addInfo(length);
+        return resultJsonVO;
+    }
 
     @GetMapping("/count/get")
     public ResultJsonVO getStatusCountByDay(@RequestParam(value = "days", required = false) String daysStr) {
