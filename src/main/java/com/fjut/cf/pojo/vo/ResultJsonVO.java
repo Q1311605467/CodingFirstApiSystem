@@ -22,10 +22,16 @@ public class ResultJsonVO {
         datas = new ArrayList<>();
     }
 
-    public ResultJsonVO(ResultJsonCode resultJsonCode, String msg) {
+    public ResultJsonVO(ResultJsonCode resultJsonCode) {
         datas = new ArrayList<>();
         this.code = resultJsonCode.getCode();
         this.msg = resultJsonCode.getName();
+    }
+
+    public ResultJsonVO(ResultJsonCode resultJsonCode, String msg) {
+        datas = new ArrayList<>();
+        this.code = resultJsonCode.getCode();
+        this.msg = msg;
     }
 
     public Integer getCode() {

@@ -67,6 +67,12 @@
         username = #{username} ;
     </update>
 
+    <update id="updateUserBaseInfoAcNumAddOneByUsername">
+        UPDATE t_user_base_info
+        SET ac_num = ac_num + 1
+        WHERE username = #{username};
+    </update>
+
     <select id="queryAllUserBaseInfo" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
         SELECT *
         FROM

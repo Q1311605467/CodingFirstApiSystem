@@ -1,5 +1,8 @@
 package com.fjut.cf.service;
 
+import com.fjut.cf.pojo.po.ProblemInfoPO;
+import com.fjut.cf.pojo.po.ProblemSamplePO;
+import com.fjut.cf.pojo.po.ProblemViewPO;
 import com.fjut.cf.pojo.vo.ProblemListVO;
 
 import java.util.List;
@@ -28,5 +31,25 @@ public interface ProblemService {
      */
     Integer queryProblemTotalCount(String title, Integer tagId);
 
+    /**
+     * 根据题目ID查询题目基本信息
+     * @param problemId
+     * @return
+     */
+    ProblemInfoPO queryProblemInfoByProblemId(Integer problemId);
+
+    /**
+     * 根据题目ID查询题目视图信息内容
+     * @param problemId
+     * @return
+     */
+    ProblemViewPO queryProblemViewByProblemId(Integer problemId);
+
+    /**
+     * 根据题目ID查询题目输入输出样例
+     * @param problemId
+     * @return
+     */
+    List<ProblemSamplePO> queryProblemSampleByProblemId(Integer problemId);
 
 }

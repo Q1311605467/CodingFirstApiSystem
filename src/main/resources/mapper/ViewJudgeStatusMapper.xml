@@ -3,11 +3,37 @@
 <mapper namespace="com.fjut.cf.mapper.ViewJudgeStatusMapper">
     <select id="queryViewJudgeStatusDescLimit" resultType="com.fjut.cf.pojo.po.ViewJudgeStatusPO">
         SELECT * FROM v_judge_status
+        WHERE 1=1
+        <if test="nick != null">
+            AND nick LIKE #{nick}
+        </if>
+        <if test="problemId != null">
+            AND problem_id = #{problemId}
+        </if>
+        <if test="result != null">
+            AND result = #{result}
+        </if>
+        <if test="language != null">
+            AND language = #{language}
+        </if>
         ORDER BY id DESC
         LIMIT #{startIndex}, #{pageSize};
     </select>
 
     <select id="queryViewJudgeStatusCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM v_judge_status;
+        SELECT COUNT(*) FROM v_judge_status
+        WHERE 1=1
+        <if test="nick != null">
+            AND nick LIKE #{nick}
+        </if>
+        <if test="problemId != null">
+            AND problem_id = #{problemId}
+        </if>
+        <if test="result != null">
+            AND result = #{result}
+        </if>
+        <if test="language != null">
+            AND language = #{language}
+        </if>;
     </select>
 </mapper>

@@ -1,7 +1,7 @@
 package com.fjut.cf.pojo.enums;
 
 /**
- * @author QAQ [20171105]
+ * @author QAQ [2017/11/5]
  */
 public enum CodeLanguage {
     GPP(0, "G++"),
@@ -40,4 +40,14 @@ public enum CodeLanguage {
         }
         return null;
     }
+
+    public static Integer getCodeByName(String name) {
+        for (CodeLanguage l : CodeLanguage.values()) {
+            if (name.equals(l.getName())) {
+                return l.getCode();
+            }
+        }
+        return null;
+    }
+
 }

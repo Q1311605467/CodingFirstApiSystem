@@ -35,6 +35,14 @@ public interface UserBaseInfoMapper {
     Integer updateUserBaseInfoByUsername(@Param("username") String username, @Param("userBaseInfo") UserBaseInfoPO userBaseInfo);
 
     /**
+     * 更新用户AC题数+1
+     *
+     * @param username
+     * @return
+     */
+    Integer updateUserBaseInfoAcNumAddOneByUsername(@Param("username") String username);
+
+    /**
      * 查找用户基本信息
      *
      * @param startIndex

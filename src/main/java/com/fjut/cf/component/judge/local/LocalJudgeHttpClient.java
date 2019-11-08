@@ -1,6 +1,6 @@
 package com.fjut.cf.component.judge.local;
 
-import com.fjut.cf.pojo.po.LocalJudgeSubmitInfoPO;
+import com.fjut.cf.pojo.bo.LocalJudgeSubmitInfoBO;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -22,7 +22,7 @@ public class LocalJudgeHttpClient {
     @Value("${cf.config.localJudgePath}")
     private String localJudgePath;
 
-    public String submitToLocalJudge(LocalJudgeSubmitInfoPO localJudgeSubmitInfoBO) {
+    public String submitToLocalJudge(LocalJudgeSubmitInfoBO localJudgeSubmitInfoBO) throws Exception {
         try {
             String postURL = localJudgePath;
             PostMethod postMethod;
@@ -39,16 +39,18 @@ public class LocalJudgeHttpClient {
             };
             postMethod.setRequestBody(data);
             HttpClient httpClient = new HttpClient();
+            httpClient.setConnectionTimeout(3000);
+            httpClient.setTimeout(3000);
             // 执行POST方法
             int response = httpClient.executeMethod(postMethod);
             String result = postMethod.getResponseBodyAsString();
             return result;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw e;
         }
     }
 
-    public String getResultFromLocalJudge(Integer rid) {
+    public String getResultFromLocalJudge(Integer rid) throws Exception {
         try {
             String postURL = localJudgePath;
             PostMethod postMethod;
@@ -60,12 +62,14 @@ public class LocalJudgeHttpClient {
             };
             postMethod.setRequestBody(data);
             HttpClient httpClient = new HttpClient();
+            httpClient.setConnectionTimeout(3000);
+            httpClient.setTimeout(3000);
             // 执行POST方法
             int response = httpClient.executeMethod(postMethod);
             String result = postMethod.getResponseBodyAsString();
             return result;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw e;
         }
 
 

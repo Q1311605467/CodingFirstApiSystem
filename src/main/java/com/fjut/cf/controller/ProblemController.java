@@ -1,6 +1,9 @@
 package com.fjut.cf.controller;
 
 import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.pojo.po.ProblemInfoPO;
+import com.fjut.cf.pojo.po.ProblemSamplePO;
+import com.fjut.cf.pojo.po.ProblemViewPO;
 import com.fjut.cf.pojo.vo.ProblemListVO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.service.ProblemService;
@@ -24,7 +27,7 @@ public class ProblemController {
     @Autowired
     ProblemTagService problemTagService;
 
-    @GetMapping("/info/get")
+    @GetMapping("/list/get")
     public ResultJsonVO getProblemLimit(@RequestParam("pageNum") Integer pageNum,
                                         @RequestParam("pageSize") Integer pageSize,
                                         @RequestParam(value = "tagId", required = false) Integer tagId,
@@ -38,12 +41,10 @@ public class ProblemController {
             pageSize = 50;
         }
         Integer startIndex = (pageNum - 1) * pageSize;
-        if(!StringUtils.isEmpty(title))
-        {
+        if (!StringUtils.isEmpty(title)) {
             // 拼接查询字符串
             title = "%" + title + "%";
-        }
-        else{
+        } else {
             // 拼接查询字符串如果为空字符或者null则 置为null
             title = null;
         }
@@ -52,6 +53,18 @@ public class ProblemController {
         resultJsonVO.addInfo(problemList);
         resultJsonVO.addInfo(integer);
         resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
+        return resultJsonVO;
+    }
+
+    @GetMapping("/info/get")
+    public ResultJsonVO getProblemInfoByProblemId(@RequestParam("problemId") Integer problemId) {
+        ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
+        ProblemInfoPO problemInfoPO = problemService.queryProblemInfoByProblemId(problemId);
+        ProblemViewPO problemViewPO = problemService.queryProblemViewByProblemId(problemId);
+        List<ProblemSamplePO> problemSamplePOS = problemService.queryProblemSampleByProblemId(problemId);
+        resultJsonVO.addInfo(problemInfoPO);
+        resultJsonVO.addInfo(problemViewPO);
+        resultJsonVO.addInfo(problemSamplePOS);
         return resultJsonVO;
     }
 

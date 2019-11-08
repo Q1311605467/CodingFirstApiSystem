@@ -20,8 +20,15 @@ logging:
 
 cf:
   config:
+    # 线程池配置
+    threadPool:
+      corePoolSize: 10
+      maxPoolSize: 100
+      queueCapacity: 200
+    # swagger配置
     swagger:
       enable: true
+    # druid配置
     druid:
       name: admin
       pwd: admin

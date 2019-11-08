@@ -2,7 +2,7 @@ package com.fjut.cf.controller;
 
 import com.fjut.cf.component.email.EmailTool;
 import com.fjut.cf.component.judge.local.LocalJudgeHttpClient;
-import com.fjut.cf.pojo.po.LocalJudgeSubmitInfoPO;
+import com.fjut.cf.pojo.bo.LocalJudgeSubmitInfoBO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.pojo.enums.ResultJsonCode;
 import com.fjut.cf.component.redis.RedisUtils;
@@ -30,7 +30,7 @@ public class TestController {
     @GetMapping("/test")
     public ResultJsonVO testMethod() {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
-        LocalJudgeSubmitInfoPO localJudgeSubmitInfo = new LocalJudgeSubmitInfoPO();
+        LocalJudgeSubmitInfoBO localJudgeSubmitInfo = new LocalJudgeSubmitInfoBO();
         localJudgeSubmitInfo.setPid(1000);
         localJudgeSubmitInfo.setRid(12345);
         localJudgeSubmitInfo.setCode("#include<stdio.h>");
@@ -38,8 +38,8 @@ public class TestController {
         localJudgeSubmitInfo.setMemoryLimit(1000);
         localJudgeSubmitInfo.setTimeLimit(1000);
         localJudgeSubmitInfo.setType("submit");
-        String s = localJudgeHttpClient.submitToLocalJudge(localJudgeSubmitInfo);
-        resultJsonVO.addInfo(s);
+        //String s = localJudgeHttpClient.submitToLocalJudge(localJudgeSubmitInfo);
+        //resultJsonVO.addInfo(s);
         return resultJsonVO;
     }
 

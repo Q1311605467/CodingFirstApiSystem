@@ -1,9 +1,9 @@
-package com.fjut.cf.pojo.po;
+package com.fjut.cf.pojo.bo;
 
 /**
- * @author axiang [20190731]
+ * @author axiang [2019/7/31]
  */
-public class LocalJudgeSubmitInfoPO {
+public class LocalJudgeSubmitInfoBO {
     private String type;
     private Integer pid;
     private Integer rid;

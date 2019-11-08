@@ -6,7 +6,7 @@ package com.fjut.cf.pojo.enums;
  * @author axiang [2019/10/22]
  */
 public enum SubmitResult {
-    PENDING(0, "pending..."),
+    PENDING(0, "Pending..."),
     AC(1, "Accepted"),
     WA(2, "Wrong Answer"),
     CE(3, "Compilation Error"),
@@ -71,6 +71,18 @@ public enum SubmitResult {
         for (SubmitResult r : SubmitResult.values()) {
             if (code == r.getCode()) {
                 return r.getName();
+            }
+        }
+        return null;
+    }
+
+    public static Integer getCodeByName(String name)
+    {
+        for(SubmitResult r: SubmitResult.values())
+        {
+            if(name.equals(r.getName()))
+            {
+                return r.getCode();
             }
         }
         return null;

@@ -26,15 +26,46 @@ public interface ProblemInfoMapper {
      */
     Integer deleteProblemInfoByProblemId(@Param("problemId") Integer problemId);
 
+    /**
+     * 更新题目提交总数+1
+     *
+     * @param problemId
+     * @return
+     */
+    Integer updateProblemInfoTotalSubmitAddOne(@Param("problemId") Integer problemId);
+
+    /**
+     * 更新题目提交AC总数+1
+     *
+     * @param problemId
+     * @return
+     */
+    Integer updateProblemInfoTotalAcAddOne(@Param("problemId") Integer problemId);
+
+    /**
+     * 更新题目提交用户总数+1
+     *
+     * @param problemId
+     * @return
+     */
+    Integer updateProblemInfoTotalSubmitUserAddOne(@Param("problemId") Integer problemId);
+
+    /**
+     * 更新提交提交用户的AC总数+1
+     *
+     * @param problemId
+     * @return
+     */
+    Integer updateProblemInfoTotalAcUserAddOne(@Param("problemId") Integer problemId);
 
     /**
      * 带条件查询题目总数
+     *
      * @param title
      * @param tagId
      * @return
      */
     Integer queryProblemInfoCount(@Param("title") String title, @Param("tagId") Integer tagId);
-
 
     /**
      * 查找 pageSize 页的题目基本信息
@@ -44,5 +75,13 @@ public interface ProblemInfoMapper {
      * @return
      */
     List<ProblemInfoPO> queryProblemInfoDescLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 根据题目ID查询题目基本信息
+     *
+     * @param problemId
+     * @return
+     */
+    ProblemInfoPO queryProblemInfoByProblemId(@Param("problemId") Integer problemId);
 
 }

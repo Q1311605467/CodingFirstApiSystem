@@ -33,6 +33,31 @@
         );
     </insert>
 
+    <update id="updateProblemInfoTotalSubmitAddOne">
+        UPDATE t_problem_info
+        SET total_submit = total_submit + 1
+        WHERE problem_id = #{problemId};
+    </update>
+
+    <update id="updateProblemInfoTotalAcAddOne">
+        UPDATE t_problem_info
+        SET total_ac = total_ac + 1
+        WHERE problem_id = #{problemId};
+    </update>
+
+    <update id="updateProblemInfoTotalSubmitUserAddOne">
+        UPDATE t_problem_info
+        SET total_submit_user = total_submit_user + 1
+        WHERE problem_id = #{problemId};
+    </update>
+
+    <update id="updateProblemInfoTotalAcUserAddOne">
+        UPDATE t_problem_info
+        SET total_ac_user = total_ac_user + 1
+        WHERE problem_id = #{problemId};
+    </update>
+
+
     <delete id="deleteProblemInfoByProblemId">
         DELETE FROM t_problem_info
         WHERE id = #{problemId};
@@ -67,5 +92,23 @@
             AND problem_id IN
             (SELECT DISTINCT problem_id FROM t_problem_tag_record WHERE tag_id=#{tagId})
         </if>;
+    </select>
+
+    <select id="queryProblemInfoByProblemId" resultType="com.fjut.cf.pojo.po.ProblemInfoPO">
+        SELECT 	id,
+        problem_id,
+        title,
+        belong_oj_id,
+        belong_problem_id,
+        author,
+        total_submit,
+        total_ac,
+        total_submit_user,
+        total_ac_user,
+        visible,
+        judge_option
+	    FROM
+	    t_problem_info
+	    WHERE problem_id = #{problemId}
     </select>
 </mapper>

@@ -2,9 +2,14 @@ package com.fjut.cf.service.impl;
 
 import com.fjut.cf.mapper.ProblemInfoMapper;
 import com.fjut.cf.mapper.ProblemMapper;
+import com.fjut.cf.mapper.ProblemSampleMapper;
+import com.fjut.cf.mapper.ProblemViewMapper;
 import com.fjut.cf.pojo.enums.OjId;
 import com.fjut.cf.pojo.enums.ProblemDifficultLevel;
+import com.fjut.cf.pojo.po.ProblemInfoPO;
 import com.fjut.cf.pojo.po.ProblemInfoWithDifficultPO;
+import com.fjut.cf.pojo.po.ProblemSamplePO;
+import com.fjut.cf.pojo.po.ProblemViewPO;
 import com.fjut.cf.pojo.vo.ProblemListVO;
 import com.fjut.cf.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,12 @@ import java.util.List;
 public class ProblemServiceImpl implements ProblemService {
     @Autowired
     ProblemInfoMapper problemInfoMapper;
+
+    @Autowired
+    ProblemViewMapper problemViewMapper;
+
+    @Autowired
+    ProblemSampleMapper problemSampleMapper;
 
     @Autowired
     ProblemMapper problemMapper;
@@ -55,5 +66,20 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Integer queryProblemTotalCount(String title, Integer tagId) {
         return problemInfoMapper.queryProblemInfoCount(title, tagId);
+    }
+
+    @Override
+    public ProblemInfoPO queryProblemInfoByProblemId(Integer problemId) {
+        return problemInfoMapper.queryProblemInfoByProblemId(problemId);
+    }
+
+    @Override
+    public ProblemViewPO queryProblemViewByProblemId(Integer problemId) {
+        return problemViewMapper.queryProblemViewByProblemId(problemId);
+    }
+
+    @Override
+    public List<ProblemSamplePO> queryProblemSampleByProblemId(Integer problemId) {
+        return problemSampleMapper.queryProblemSampleByProblemId(problemId);
     }
 }
