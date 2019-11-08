@@ -489,7 +489,8 @@ CREATE TABLE `t_acb_record`
 
 ### ------------------------------------------------------------------------------------------ ###
 
-# 评测列表视图
+# 评测列表视图（过滤非法用户名提交的代码显示）
+DROP VIEW IF EXISTS `v_judge_status`;
 CREATE VIEW v_judge_status
 AS
 SELECT tjs.id,
@@ -506,7 +507,7 @@ SELECT tjs.id,
        tjs.code,
        tjs.code_length
 FROM t_judge_status tjs
-         LEFT JOIN t_user_base_info tubi
-                   ON tjs.username = tubi.username
+         JOIN t_user_base_info tubi
+              ON tjs.username = tubi.username
 ORDER BY tjs.id DESC
 
