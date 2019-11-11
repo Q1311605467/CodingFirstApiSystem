@@ -133,6 +133,17 @@ CREATE TABLE `t_user_seal`
     FOREIGN KEY (username) REFERENCES t_user_base_info (username)
 );
 
+DROP TABLE IF EXISTS `t_user_message`;
+CREATE TABLE `t_user_message`
+(
+    id       INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL,
+    status   SMALLINT DEFAULT 0 COMMENT '0:未读，1：已读',
+    title    VARCHAR(100),
+    text     text        NOT NULL,
+    time     DATETIME DEFAULT NOW()
+);
+
 ### ------------------------------------------------------------------------------------------ ###
 
 # 系统权限类型表
@@ -335,6 +346,21 @@ CREATE TABLE `t_judge_result`
     judge_id INT COMMENT '评测ID',
     info     MEDIUMTEXT NOT NULL COMMENT '评测返回的结果',
     INDEX (judge_id)
+);
+
+# 用户解决题目表
+DROP TABLE IF EXISTS `t_user_problem_solved`;
+CREATE TABLE `t_user_problem_solved`
+(
+    id                INT PRIMARY KEY AUTO_INCREMENT,
+    username          VARCHAR(30),
+    problem_id        INT,
+    try_count         INT DEFAULT 0 COMMENT '尝试次数',
+    solved_count      INT DEFAULT 0 COMMENT '解决次数',
+    last_try_time     DATETIME COMMENT '最后尝试日期',
+    first_solved_time DATETIME COMMENT '第一次解锁日期',
+    KEY (username),
+    KEY (problem_id)
 );
 
 ### ------------------------------------------------------------------------------------------ ###

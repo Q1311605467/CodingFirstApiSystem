@@ -1,5 +1,16 @@
 # 从 ojtest 迁移 到 cf_test 测试库 脚本文件
 
+# 迁移 t_message 到 t_user_message
+INSERT INTO cf_test.t_user_message
+    (SELECT mid as id,
+            user as username,
+            statu as status,
+            title as title,
+            text as text,
+            time as time
+        FROM ojtest.t_message
+            );
+
 # 迁移 contest 到 t_contest_info
 INSERT INTO cf_test.t_contest_info
     (SELECT null              as id,
