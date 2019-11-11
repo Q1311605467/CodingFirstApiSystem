@@ -13,4 +13,11 @@
         #{judgeResultPO.info}
         );
     </insert>
+
+    <select id="queryJudgeResultByJudgeId" resultType="com.fjut.cf.pojo.po.JudgeResultPO">
+        SELECT  judge_id,
+                info
+        FROM t_judge_result
+        WHERE judge_id = #{judgeId}
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.fjut.cf.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fjut.cf.component.interceptor.PrivateRequired;
 import com.fjut.cf.component.judge.local.LocalJudgeHttpClient;
 import com.fjut.cf.pojo.bo.LocalJudgeSubmitInfoBO;
 import com.fjut.cf.pojo.enums.CodeLanguage;
@@ -127,7 +128,7 @@ public class JudgeStatusController {
      * @param cid
      * @return
      */
-    //@PrivateRequired
+    @PrivateRequired
     @PostMapping("/submit/post")
     public ResultJsonVO submitToLocalJudge(@RequestParam("pid") Integer pid,
                                            @RequestParam("timeLimit") Integer timeLimit,
@@ -191,7 +192,7 @@ public class JudgeStatusController {
         JSONObject jsonObject = JSONObject.parseObject(submitJsonStr);
         // 如果提交到本地评测机成功，则
         if ("success".equals(jsonObject.getString("ret"))) {
-            // 更新数据库表开
+            // 更新数据库表
             judgeStatusService.updateJudgeStatusWhenSubmitSuccess(judgeStatusPO);
             // 启用异步Service获取结果
             judgeStatusService.queryResultFromLocalJudgeAsync(judgeStatusPO);

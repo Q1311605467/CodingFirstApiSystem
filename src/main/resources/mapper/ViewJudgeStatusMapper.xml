@@ -36,4 +36,9 @@
             AND language = #{language}
         </if>;
     </select>
+
+    <select id="queryViewJudgeStatusById" resultType="com.fjut.cf.pojo.po.ViewJudgeStatusPO">
+        SELECT * FROM v_judge_status
+        WHERE id = #{id};
+    </select>
 </mapper>

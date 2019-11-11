@@ -74,4 +74,13 @@ public interface JudgeStatusService {
      * @return
      */
     Integer queryViewJudgeStatusCount(String nick, Integer problemId, Integer result, Integer language);
+
+    /**
+     * 根据评测ID查询评测列表视图
+     *
+     * @param id
+     * @return
+     */
+    JudgeStatusVO queryViewJudgeStatusById(Integer id);
+
 }

@@ -45,8 +45,8 @@ public interface JudgeStatusMapper {
     Integer updateJudgeStatusResultById(@Param("id") Integer id, @Param("result") Integer result);
 
     /**
+     * @deprecated 由ViewJudgeStatusMapper中的queryViewJudgeStatusDescLimit代替
      * 分页查询带昵称的用户评测信息
-     *
      * @param nick
      * @param problemId
      * @param result

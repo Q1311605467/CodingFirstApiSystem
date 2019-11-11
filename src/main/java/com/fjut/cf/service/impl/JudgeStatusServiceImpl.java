@@ -55,8 +55,8 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
         // 题目ID的题目提交总数+1
         problemInfoMapper.updateProblemInfoTotalSubmitAddOne(judgeStatusPO.getProblemId());
         Integer count = judgeStatusMapper.queryAllJudgeStatusByUsernameAndProblemId(judgeStatusPO.getUsername(), judgeStatusPO.getProblemId());
-        // 如果用户之前未提交该题，则题目ID的提交用户总数+1
-        if (count == 0) {
+        // 如果用户是第一次提交该题，则题目的总提交用户数+1
+        if (count == 1) {
             problemInfoMapper.updateProblemInfoTotalSubmitUserAddOne(judgeStatusPO.getProblemId());
         }
         return true;
@@ -69,7 +69,7 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
         // 更新评测结果内容
         JudgeResultPO judgeResultPO = new JudgeResultPO();
         judgeResultPO.setJudgeId(judgeId);
-        judgeResultPO.setInfo("submit to local judge system fail at " + new Date().toString());
+        judgeResultPO.setInfo("Submit to local judge system fail at " + new Date().toString());
         judgeResultMapper.insertJudgeResult(judgeResultPO);
         return true;
     }
@@ -235,5 +235,28 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
     @Override
     public Integer queryViewJudgeStatusCount(String nick, Integer problemId, Integer result, Integer language) {
         return viewJudgeStatusMapper.queryViewJudgeStatusCount(nick, problemId, result, language);
+    }
+
+    @Override
+    public JudgeStatusVO queryViewJudgeStatusById(Integer id) {
+        ViewJudgeStatusPO viewJudgeStatusPO = viewJudgeStatusMapper.queryViewJudgeStatusById(id);
+        JudgeStatusVO judgeStatusVO = new JudgeStatusVO();
+        judgeStatusVO.setUsername(viewJudgeStatusPO.getUsername());
+        // 如果是Score的，带上分值
+        if (viewJudgeStatusPO.getResult() == SubmitResult.SC.getCode()) {
+            judgeStatusVO.setResult(SubmitResult.getNameByCode(viewJudgeStatusPO.getResult()) + " " + viewJudgeStatusPO.getScore());
+        } else {
+            judgeStatusVO.setResult(SubmitResult.getNameByCode(viewJudgeStatusPO.getResult()));
+        }
+        judgeStatusVO.setSubmitTime(viewJudgeStatusPO.getSubmitTime());
+        judgeStatusVO.setProblemId(viewJudgeStatusPO.getProblemId());
+        judgeStatusVO.setMemoryUsed(viewJudgeStatusPO.getMemoryUsed());
+        judgeStatusVO.setTimeUsed(viewJudgeStatusPO.getTimeUsed());
+        judgeStatusVO.setNick(viewJudgeStatusPO.getNick());
+        judgeStatusVO.setCode(viewJudgeStatusPO.getCode());
+        judgeStatusVO.setCodeLength(viewJudgeStatusPO.getCodeLength());
+        judgeStatusVO.setLanguage(CodeLanguage.getNameByCode(viewJudgeStatusPO.getLanguage()));
+        judgeStatusVO.setId(viewJudgeStatusPO.getId());
+        return judgeStatusVO;
     }
 }

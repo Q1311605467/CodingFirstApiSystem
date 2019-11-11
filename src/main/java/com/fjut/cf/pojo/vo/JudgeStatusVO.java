@@ -14,6 +14,7 @@ public class JudgeStatusVO {
     private String language;
     private String timeUsed;
     private String memoryUsed;
+    private String code;
     private Integer codeLength;
     private Date submitTime;
 
@@ -79,6 +80,14 @@ public class JudgeStatusVO {
 
     public void setMemoryUsed(String memoryUsed) {
         this.memoryUsed = memoryUsed;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Integer getCodeLength() {

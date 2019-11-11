@@ -14,4 +14,12 @@ public interface JudgeResultMapper {
      * @return
      */
     Integer insertJudgeResult(@Param("judgeResultPO") JudgeResultPO judgeResultPO);
+
+    /**
+     * 根据评测ID 获取评测结果
+     *
+     * @param judgeId
+     * @return
+     */
+    JudgeResultPO queryJudgeResultByJudgeId(@Param("judgeId") Integer judgeId);
 }
