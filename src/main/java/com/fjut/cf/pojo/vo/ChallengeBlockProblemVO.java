@@ -1,11 +1,12 @@
-package com.fjut.cf.pojo.po;
+package com.fjut.cf.pojo.vo;
 
 /**
- * @author axiang [2019/10/21]
+ * @author axiang [2019/11/11]
  */
-public class ChallengeBlockProblemPO {
+public class ChallengeBlockProblemVO {
     private Integer id;
     private Integer blockId;
+    private String title;
     private Integer problemOrder;
     private Integer problemId;
     private Integer score;
@@ -25,6 +26,14 @@ public class ChallengeBlockProblemPO {
 
     public void setBlockId(Integer blockId) {
         this.blockId = blockId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getProblemOrder() {
@@ -61,12 +70,13 @@ public class ChallengeBlockProblemPO {
 
     @Override
     public String toString() {
-        return "ChallengeBlockProblemPO{" +
+        return "ChallengeBlockProblemVO{" +
                 "id=" + id +
                 ", blockId=" + blockId +
+                ", title='" + title + '\'' +
                 ", problemOrder=" + problemOrder +
                 ", problemId=" + problemId +
-                ", totalScore=" + score +
+                ", score=" + score +
                 ", rewardAcb=" + rewardAcb +
                 '}';
     }

@@ -2,14 +2,14 @@
 
 # 迁移 t_message 到 t_user_message
 INSERT INTO cf_test.t_user_message
-    (SELECT mid as id,
-            user as username,
+    (SELECT mid   as id,
+            user  as username,
             statu as status,
             title as title,
-            text as text,
-            time as time
-        FROM ojtest.t_message
-            );
+            text  as text,
+            time  as time
+     FROM ojtest.t_message
+    );
 
 # 迁移 contest 到 t_contest_info
 INSERT INTO cf_test.t_contest_info
@@ -105,6 +105,15 @@ INSERT INTO cf_test.t_challenge_block_problem
             0     as reward_acb
      FROM ojtest.t_challenge_problem);
 
+# 迁移 t_challenge_openblock 到 t_challenge_user_open_block
+INSERT INTO cf_test.t_challenge_user_open_block
+    (select null as id,
+            username,
+            block as block_id,
+            NOW() as unlock_time
+     from ojtest.t_challenge_openblock
+    );
+
 # 迁移 permission 到 t_permission_type
 INSERT INTO cf_test.t_permission_type
     (SELECT id   as id,
@@ -165,3 +174,14 @@ INSERT INTO cf_test.t_problem_view
             Input       as input,
             Output      as output
      FROM ojtest.t_problemview);
+
+# 迁移 t_usersolve 到 t_user_problem_solved
+INSERT INTO cf_test.t_user_problem_solved
+(SELECT null as id,
+        username as username,
+        pid as problem_id,
+        status as try_count,
+        status as solved_count,
+        now() as last_try_time,
+        now() as first_solved_time
+    FROM ojtest.t_usersolve);
