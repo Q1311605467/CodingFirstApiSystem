@@ -107,7 +107,7 @@ INSERT INTO cf_test.t_challenge_block_problem
 
 # 迁移 t_challenge_openblock 到 t_challenge_user_open_block
 INSERT INTO cf_test.t_challenge_user_open_block
-    (select null as id,
+    (select null  as id,
             username,
             block as block_id,
             NOW() as unlock_time
@@ -177,11 +177,27 @@ INSERT INTO cf_test.t_problem_view
 
 # 迁移 t_usersolve 到 t_user_problem_solved
 INSERT INTO cf_test.t_user_problem_solved
-(SELECT null as id,
-        username as username,
-        pid as problem_id,
-        status as try_count,
-        status as solved_count,
-        now() as last_try_time,
-        now() as first_solved_time
-    FROM ojtest.t_usersolve);
+    (SELECT null     as id,
+            username as username,
+            pid      as problem_id,
+            status   as try_count,
+            status   as solved_count,
+            now()    as last_try_time,
+            now()    as first_solved_time
+     FROM ojtest.t_usersolve);
+
+# 迁移 t_mall 到 t_mall_goods
+INSERT INTO cf_test.t_mall_goods
+    (SELECT id             as id,
+            title          as name,
+            acb            as cost,
+            0              as goods_type,
+            -1             as stock,
+            des            as description,
+            url            as picture_url,
+            1              as visible,
+            user           as shelf_user,
+            time           as shelf_time,
+            buyLimit       as buy_limit,
+            buyVerifyLimit as buy_verify_limit
+     FROM ojtest.t_mall);

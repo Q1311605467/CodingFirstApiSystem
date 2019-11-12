@@ -1,6 +1,7 @@
 package com.fjut.cf.service;
 
 import com.fjut.cf.pojo.po.UserBaseInfoPO;
+import com.fjut.cf.pojo.po.UserCustomInfoPO;
 import com.fjut.cf.pojo.vo.UserAcNumBorderVO;
 import com.fjut.cf.pojo.vo.UserAcbBorderVO;
 import com.fjut.cf.pojo.vo.UserInfoVO;
@@ -72,6 +73,14 @@ public interface UserService {
      * @return
      */
     UserInfoVO queryUserInfoByUsername(String username);
+
+    /**
+     * 根据用户名查询用户个性化信息
+     *
+     * @param username
+     * @return
+     */
+    UserCustomInfoPO queryUserCustomInfoByUsername(String username);
 
     /**
      * 查询ACB榜单

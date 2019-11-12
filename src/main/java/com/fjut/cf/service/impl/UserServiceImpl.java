@@ -129,6 +129,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserCustomInfoPO queryUserCustomInfoByUsername(String username) {
+        return userCustomInfoMapper.queryUserCustomInfoByUsername(username);
+    }
+
+    @Override
     public List<UserAcbBorderVO> queryAcbBorder(int startIndex, int pageSize) {
         List<UserAcbBorderVO> userAcbBorderVOS = new ArrayList<>();
         List<UserBaseInfoPO> userBaseInfoPOS = userBaseInfoMapper.queryAcbTopDescLimit(startIndex, pageSize);

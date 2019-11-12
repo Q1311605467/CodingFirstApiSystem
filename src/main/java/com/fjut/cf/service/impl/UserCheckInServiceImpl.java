@@ -17,7 +17,22 @@ public class UserCheckInServiceImpl implements UserCheckInService {
     UserCheckInMapper userCheckInMapper;
 
     @Override
+    public List<UserCheckInPO> queryAllUserCheckInByUsername(String username) {
+        return userCheckInMapper.queryAllUserCheckInByUsername(username);
+    }
+
+    @Override
+    public Integer queryTodayUserCheckInCountByUsername(String username) {
+        return userCheckInMapper.queryTodayUserCheckInCountByUsername(username);
+    }
+
+    @Override
     public List<UserCheckInPO> queryUserCheckInByUsername(String username, Integer startIndex, Integer pageSize) {
         return userCheckInMapper.queryUserCheckInByUsernameDescLimit(username, startIndex, pageSize);
+    }
+
+    @Override
+    public Integer insertUserCheckIn(UserCheckInPO userCheckInPO) {
+        return userCheckInMapper.insertUserCheckIn(userCheckInPO);
     }
 }

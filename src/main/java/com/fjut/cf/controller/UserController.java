@@ -2,14 +2,14 @@ package com.fjut.cf.controller;
 
 import com.fjut.cf.component.interceptor.LoginRequired;
 import com.fjut.cf.component.interceptor.PrivateRequired;
-import com.fjut.cf.pojo.vo.*;
-import com.fjut.cf.pojo.po.UserBaseInfoPO;
-import com.fjut.cf.pojo.po.UserCheckInPO;
-import com.fjut.cf.pojo.enums.ResultJsonCode;
-import com.fjut.cf.service.UserCheckInService;
-import com.fjut.cf.service.UserService;
 import com.fjut.cf.component.token.TokenManager;
 import com.fjut.cf.component.token.TokenModel;
+import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.pojo.po.UserBaseInfoPO;
+import com.fjut.cf.pojo.po.UserCustomInfoPO;
+import com.fjut.cf.pojo.vo.*;
+import com.fjut.cf.service.UserCheckInService;
+import com.fjut.cf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -56,10 +56,12 @@ public class UserController {
         }
         if (userService.doUserLogin(username, password)) {
             resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS, "登录成功！");
+            UserCustomInfoPO userCustomInfoPO = userService.queryUserCustomInfoByUsername(username);
             TokenModel tokenModel = tokenManager.createToken(username);
             String auth = tokenManager.createAuth(tokenModel);
             resultJsonVO.addInfo(username);
             resultJsonVO.addInfo(auth);
+            resultJsonVO.addInfo(userCustomInfoPO);
         } else {
             Integer attemptCount = userService.queryUserAuthAttemptNumberByUsername(username);
             resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "登录失败！账号或密码不正确！您还有 " + (Math.max(5 - attemptCount, 0)) + "次机会");
@@ -111,30 +113,20 @@ public class UserController {
         return resultJsonVO;
     }
 
+    @PrivateRequired
+    @PostMapping("/logout")
+    public ResultJsonVO postUserLogOut(@RequestParam("username") String username) {
+        ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
+        tokenManager.deleteToken(username);
+        return resultJsonVO;
+    }
+
     @GetMapping("/info/get")
     @LoginRequired
     public ResultJsonVO getUserInfoByUsername(@RequestParam("username") String username) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         UserInfoVO userInfoVO = userService.queryUserInfoByUsername(username);
         resultJsonVO.addInfo(userInfoVO);
-        return resultJsonVO;
-    }
-
-    @GetMapping("/check_in/get")
-    @PrivateRequired
-    public ResultJsonVO getUserCheckInByUsername(@RequestParam("username") String username,
-                                                 @RequestParam("pageNum") Integer pageNum,
-                                                 @RequestParam("pageSize") Integer pageSize) {
-        ResultJsonVO resultJsonVO = new ResultJsonVO();
-        if (pageNum == null) {
-            pageNum = 0;
-        }
-        if (pageSize == null) {
-            pageSize = 30;
-        }
-        Integer startIndex = (pageNum - 1) * pageSize;
-        List<UserCheckInPO> userCheckInPOS = userCheckInService.queryUserCheckInByUsername(username, startIndex, pageSize);
-        resultJsonVO.addInfo(userCheckInPOS);
         return resultJsonVO;
     }
 

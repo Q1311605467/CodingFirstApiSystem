@@ -18,6 +18,19 @@
         );
     </insert>
 
+    <select id="queryAllUserCheckInByUsername" resultType="com.fjut.cf.pojo.po.UserCheckInPO">
+        SELECT
+        id,
+        username,
+        check_time,
+        info,
+        ip_address
+        from
+        t_user_check_in
+        WHERE username = #{username}
+        ORDER BY check_time DESC;
+    </select>
+
     <select id="queryUserCheckInByUsernameDescLimit" resultType="com.fjut.cf.pojo.po.UserCheckInPO">
         SELECT
         id,
@@ -28,6 +41,14 @@
         from
         t_user_check_in
         WHERE username = #{username}
+        ORDER BY check_time DESC
         LIMIT #{startIndex}, #{pageSize};
     </select>
+
+    <select id="queryTodayUserCheckInCountByUsername" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_user_check_in
+        WHERE username = #{username}
+        AND TO_DAYS(check_time) = TO_DAYS(NOW());
+    </select>
+
 </mapper>

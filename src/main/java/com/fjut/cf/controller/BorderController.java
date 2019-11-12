@@ -30,4 +30,6 @@ public class BorderController {
         resultJsonVO.addInfo(count);
         return resultJsonVO;
     }
+
+
 }

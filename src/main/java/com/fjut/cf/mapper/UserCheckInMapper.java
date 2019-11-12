@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface UserCheckInMapper {
     /**
-     * 插入一条登录记录
+     * 插入一条签到记录
      *
      * @param userCheckInPO
      * @return
@@ -18,7 +18,22 @@ public interface UserCheckInMapper {
     Integer insertUserCheckIn(@Param("userCheckInPO") UserCheckInPO userCheckInPO);
 
     /**
-     * 分页查询根据用户签到记录
+     * 根据用户名查询全部用户签到记录
+     * @param username
+     * @return
+     */
+    List<UserCheckInPO> queryAllUserCheckInByUsername(@Param("username") String username);
+
+
+    /**
+     * 根据用户名查询用户今天的签到次数
+     * @param username
+     * @return
+     */
+    Integer queryTodayUserCheckInCountByUsername(@Param("username") String username);
+
+    /**
+     * 根据用户分页查询签到记录
      * @param username
      * @param startIndex
      * @param pageSize
