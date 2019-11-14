@@ -73,22 +73,56 @@
         WHERE username = #{username};
     </update>
 
-    <select id="queryAllUserBaseInfo" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
-        SELECT *
+    <select id="queryUserBaseInfoDescLimit" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
+        SELECT id,
+        username,
+        nick,
+        gender,
+        email,
+        phone,
+        motto,
+        register_time,
+        rating,
+        ranking,
+        ac_num,
+        acb,
+        school,
+        faculty,
+        major,
+        cla,
+        student_id,
+        graduation_year
         FROM
         t_user_base_info
         LIMIT #{startIndex}, #{pageSize};
     </select>
 
-    <select id="queryUserBaseInfoByUsername" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
-        SELECT *
+    <select id="queryUserBaseInfoCountByUsername" resultType="java.lang.Integer">
+        SELECT COUNT(*)
         FROM
         t_user_base_info
         WHERE username = #{username}
     </select>
 
-    <select id="queryUserBaseInfoCountByUsername" resultType="java.lang.Integer">
-        SELECT COUNT(*)
+    <select id="queryUserBaseInfoByUsername" resultType="com.fjut.cf.pojo.po.UserBaseInfoPO">
+        SELECT id,
+        username,
+        nick,
+        gender,
+        email,
+        phone,
+        motto,
+        register_time,
+        rating,
+        ranking,
+        ac_num,
+        acb,
+        school,
+        faculty,
+        major,
+        cla,
+        student_id,
+        graduation_year
         FROM
         t_user_base_info
         WHERE username = #{username}

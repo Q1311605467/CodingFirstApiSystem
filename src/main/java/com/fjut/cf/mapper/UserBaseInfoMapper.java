@@ -49,15 +49,7 @@ public interface UserBaseInfoMapper {
      * @param pageSize
      * @return
      */
-    List<UserBaseInfoPO> queryAllUserBaseInfo(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
-
-    /**
-     * 根据用户名查找用户基本信息
-     *
-     * @param username
-     * @return
-     */
-    UserBaseInfoPO queryUserBaseInfoByUsername(@Param("username") String username);
+    List<UserBaseInfoPO> queryUserBaseInfoDescLimit(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
 
     /**
      * 根据用户名查询用户基本信息数量
@@ -66,6 +58,14 @@ public interface UserBaseInfoMapper {
      * @return
      */
     Integer queryUserBaseInfoCountByUsername(@Param("username") String username);
+
+    /**
+     * 根据用户名查找用户基本信息
+     *
+     * @param username
+     * @return
+     */
+    UserBaseInfoPO queryUserBaseInfoByUsername(@Param("username") String username);
 
     /**
      * 分页查询ACB榜单

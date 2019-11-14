@@ -3,7 +3,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- * 打包 War时需要用到的
+ * 打包 War时需要
  *
  * @author axiang [2019/10/14]
  */

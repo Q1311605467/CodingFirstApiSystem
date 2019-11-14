@@ -1,11 +1,7 @@
 package com.fjut.cf.service;
 
 import com.fjut.cf.pojo.po.UserBaseInfoPO;
-import com.fjut.cf.pojo.po.UserCustomInfoPO;
-import com.fjut.cf.pojo.vo.UserAcNumBorderVO;
-import com.fjut.cf.pojo.vo.UserAcbBorderVO;
-import com.fjut.cf.pojo.vo.UserInfoVO;
-import com.fjut.cf.pojo.vo.UserRatingBorderVO;
+import com.fjut.cf.pojo.vo.*;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +9,7 @@ import java.util.List;
 /**
  * @author axiang [2019/10/11]
  */
-public interface UserService {
+public interface UserInfoService {
     /**
      * 注册用户
      *
@@ -56,7 +52,6 @@ public interface UserService {
      */
     Integer queryUserAuthAttemptNumberByUsername(String username);
 
-
     /**
      * 查找全部用户基础信息
      *
@@ -72,7 +67,7 @@ public interface UserService {
      * @param username
      * @return
      */
-    UserInfoVO queryUserInfoByUsername(String username);
+    UserBaseInfoPO queryUserInfoByUsername(String username);
 
     /**
      * 根据用户名查询用户个性化信息
@@ -80,7 +75,7 @@ public interface UserService {
      * @param username
      * @return
      */
-    UserCustomInfoPO queryUserCustomInfoByUsername(String username);
+    UserCustomInfoVO queryUserCustomInfoByUsername(String username);
 
     /**
      * 查询ACB榜单
@@ -109,6 +104,14 @@ public interface UserService {
      */
     List<UserRatingBorderVO> queryRatingBorder(int startIndex, int pageSize);
 
+    /**
+     * 根据用户名查询用户能力雷达
+     * TODO：目前没做加权，只是简单计算解答数量！
+     *
+     * @param username
+     * @return
+     */
+    List<UserRadarVO> queryUserRadarByUsername(String username);
 
 
 }

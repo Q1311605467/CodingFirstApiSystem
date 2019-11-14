@@ -1,17 +1,9 @@
 package com.fjut.cf.service.impl;
 
-import com.fjut.cf.mapper.UserAuthMapper;
-import com.fjut.cf.mapper.UserBaseInfoMapper;
-import com.fjut.cf.mapper.UserCheckInMapper;
-import com.fjut.cf.mapper.UserCustomInfoMapper;
-import com.fjut.cf.pojo.po.UserAuthPO;
-import com.fjut.cf.pojo.po.UserBaseInfoPO;
-import com.fjut.cf.pojo.po.UserCustomInfoPO;
-import com.fjut.cf.pojo.vo.UserAcNumBorderVO;
-import com.fjut.cf.pojo.vo.UserAcbBorderVO;
-import com.fjut.cf.pojo.vo.UserInfoVO;
-import com.fjut.cf.pojo.vo.UserRatingBorderVO;
-import com.fjut.cf.service.UserService;
+import com.fjut.cf.mapper.*;
+import com.fjut.cf.pojo.po.*;
+import com.fjut.cf.pojo.vo.*;
+import com.fjut.cf.service.UserInfoService;
 import com.fjut.cf.util.SHAUtils;
 import com.fjut.cf.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +18,7 @@ import java.util.List;
  * @author axiang [2019/10/11]
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     UserBaseInfoMapper userBaseInfoMapper;
 
@@ -38,6 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserCheckInMapper userCheckInMapper;
+
+    @Autowired
+    UserSealMapper userSealMapper;
+
+    @Autowired
+    UserTitleMapper userTitleMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -115,22 +113,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserBaseInfoPO> queryAllUserBaseInfo(int startIndex, int pageSize) {
-        return userBaseInfoMapper.queryAllUserBaseInfo(startIndex, pageSize);
+        return userBaseInfoMapper.queryUserBaseInfoDescLimit(startIndex, pageSize);
     }
 
     @Override
-    public UserInfoVO queryUserInfoByUsername(String username) {
+    public UserBaseInfoPO queryUserInfoByUsername(String username) {
         UserBaseInfoPO userBaseInfoPO = userBaseInfoMapper.queryUserBaseInfoByUsername(username);
-        UserCustomInfoPO userCustomInfoPO = userCustomInfoMapper.queryUserCustomInfoByUsername(username);
-        UserInfoVO userInfoVO = new UserInfoVO();
-        userInfoVO.setUserBaseInfoPO(userBaseInfoPO);
-        userInfoVO.setUserCustomInfoPO(userCustomInfoPO);
-        return userInfoVO;
+        return userBaseInfoPO;
     }
 
     @Override
-    public UserCustomInfoPO queryUserCustomInfoByUsername(String username) {
-        return userCustomInfoMapper.queryUserCustomInfoByUsername(username);
+    public UserCustomInfoVO queryUserCustomInfoByUsername(String username) {
+        UserCustomInfoPO userCustomInfoPO = userCustomInfoMapper.queryUserCustomInfoByUsername(username);
+        UserCustomInfoVO result = new UserCustomInfoVO();
+        result.setId(userCustomInfoPO.getId());
+        result.setUsername(userCustomInfoPO.getUsername());
+        result.setAvatarUrl(userCustomInfoPO.getAvatarUrl());
+        if (userCustomInfoPO.getAdjectiveId() != null) {
+            UserTitlePO userAdjTitle = userTitleMapper.queryUserTitleById(userCustomInfoPO.getAdjectiveId());
+            result.setAdjectiveTitle(userAdjTitle.getName());
+        }
+        if (userCustomInfoPO.getArticleId() != null) {
+            UserTitlePO userArtTitle = userTitleMapper.queryUserTitleById(userCustomInfoPO.getArticleId());
+            result.setArticleTitle(userArtTitle.getName());
+        }
+        if (userCustomInfoPO.getSealId() != null) {
+            UserSealPO userSealPO = userSealMapper.queryUserSealById(userCustomInfoPO.getSealId());
+            result.setSealUrl(userSealPO.getPictureUrl());
+        }
+        return result;
     }
 
     @Override
@@ -175,5 +186,9 @@ public class UserServiceImpl implements UserService {
         return userRatingBorderVOS;
     }
 
+    @Override
+    public List<UserRadarVO> queryUserRadarByUsername(String username) {
+        return null;
+    }
 
 }

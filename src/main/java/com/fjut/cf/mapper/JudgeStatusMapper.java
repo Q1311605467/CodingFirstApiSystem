@@ -45,26 +45,6 @@ public interface JudgeStatusMapper {
     Integer updateJudgeStatusResultById(@Param("id") Integer id, @Param("result") Integer result);
 
     /**
-     * @deprecated 由ViewJudgeStatusMapper中的queryViewJudgeStatusDescLimit代替
-     * 分页查询带昵称的用户评测信息
-     * @param nick
-     * @param problemId
-     * @param result
-     * @param language
-     * @param startIndex
-     * @param pageSize
-     * @return
-     */
-    List<JudgeStatusPO> queryJudgeStatusWithNickDescLimit(
-            @Param("nick") String nick,
-            @Param("problemId") Integer problemId,
-            @Param("result") Integer result,
-            @Param("language") Integer language,
-            @Param("startIndex") Integer startIndex,
-            @Param("pageSize") Integer pageSize);
-
-
-    /**
      * 查询最近 days 天的提交统计
      *
      * @param days
@@ -96,4 +76,12 @@ public interface JudgeStatusMapper {
      * @return
      */
     Integer queryAcJudgeStatusByUsernameAndProblemId(@Param("username") String username, @Param("problemId") Integer problemId);
+
+    /**
+     * 根据用户名查询评测记录条数
+     *
+     * @param username
+     * @return
+     */
+    Integer queryJudgeStatusCountByUsername(@Param("username") String username);
 }

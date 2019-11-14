@@ -3,6 +3,7 @@ package com.fjut.cf.config;
 import com.fjut.cf.component.interceptor.LoginRequestInterceptor;
 import com.fjut.cf.component.interceptor.PrivateRequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,6 +15,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class ControllerConfiguration implements WebMvcConfigurer {
+
+    /** 是否启用权限拦截器 */
+    @Value("${cf.config.authInterceptor.enable}")
+    private boolean enable;
 
     @Autowired
     private LoginRequestInterceptor loginRequestInterceptor;
@@ -28,8 +33,10 @@ public class ControllerConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginRequestInterceptor).addPathPatterns("/**");
-        registry.addInterceptor(privateRequestInterceptor).addPathPatterns("/**");
-
+        if(enable)
+        {
+            registry.addInterceptor(loginRequestInterceptor).addPathPatterns("/**");
+            registry.addInterceptor(privateRequestInterceptor).addPathPatterns("/**");
+        }
     }
 }

@@ -9,6 +9,7 @@ import com.fjut.cf.service.BorderHonorRankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,7 @@ public class BorderHonorRankServiceImpl implements BorderHonorRankService {
     public List<BorderHonorRankVO> queryBorderHonorRankDescLimit(Integer startIndex, Integer pageSize) {
         List<BorderHonorRankVO> results = new ArrayList<>();
         List<BorderHonorRankPO> borderHonorRankPOS = borderHonorRankMapper.queryBorderHonorRankDescLimit(startIndex, pageSize);
-        for(BorderHonorRankPO item : borderHonorRankPOS)
-        {
+        for (BorderHonorRankPO item : borderHonorRankPOS) {
             BorderHonorRankVO borderHonorRankVO = new BorderHonorRankVO();
             borderHonorRankVO.setContestLevel(ContestLevel.getNameByCode(item.getContestLevel()));
             borderHonorRankVO.setAwardLevel(AwardLevel.getNameByCode(item.getAwardLevel()));
@@ -47,5 +47,21 @@ public class BorderHonorRankServiceImpl implements BorderHonorRankService {
     @Override
     public Integer queryBorderHonorRankCount() {
         return borderHonorRankMapper.queryBorderHonorRankCount();
+    }
+
+    @Override
+    public List<String> queryBorderHonorRankByUsername(String username) {
+        List<String> result = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        List<BorderHonorRankPO> borderHonorRankPOS = borderHonorRankMapper.queryBorderHonorRankByUsername(username);
+        for (BorderHonorRankPO honorRankPO : borderHonorRankPOS) {
+            String str = "";
+            str = format.format(honorRankPO.getRewardDate()) + ": 参加 " +
+                    ContestLevel.getNameByCode(honorRankPO.getContestLevel())
+                    + " 获得 " + AwardLevel.getNameByCode(honorRankPO.getAwardLevel())
+                    + " " + honorRankPO.getDescription();
+            result.add(str);
+        }
+        return result;
     }
 }

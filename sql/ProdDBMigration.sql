@@ -69,6 +69,7 @@ INSERT INTO coding_first.t_problem_info
 INSERT INTO coding_first.t_problem_difficult
     (SELECT id             as id,
             pid            as problem_id,
+            0              as problem_type,
             difficult_type as difficult_level
      FROM ojtest.t_problem_difficult);
 

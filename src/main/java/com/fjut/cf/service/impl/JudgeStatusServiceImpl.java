@@ -8,6 +8,7 @@ import com.fjut.cf.pojo.enums.CodeLanguage;
 import com.fjut.cf.pojo.enums.SubmitResult;
 import com.fjut.cf.pojo.po.JudgeResultPO;
 import com.fjut.cf.pojo.po.JudgeStatusPO;
+import com.fjut.cf.pojo.po.UserProblemSolvedPO;
 import com.fjut.cf.pojo.po.ViewJudgeStatusPO;
 import com.fjut.cf.pojo.vo.JudgeStatusVO;
 import com.fjut.cf.pojo.vo.StatusCountVO;
@@ -42,6 +43,9 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
     ViewJudgeStatusMapper viewJudgeStatusMapper;
 
     @Autowired
+    UserProblemSolvedMapper userProblemSolvedMapper;
+
+    @Autowired
     LocalJudgeHttpClient localJudgeHttpClient;
 
     @Override
@@ -52,12 +56,30 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean updateJudgeStatusWhenSubmitSuccess(JudgeStatusPO judgeStatusPO) {
+        String username = judgeStatusPO.getUsername();
+        Integer problemId = judgeStatusPO.getProblemId();
         // 题目ID的题目提交总数+1
-        problemInfoMapper.updateProblemInfoTotalSubmitAddOne(judgeStatusPO.getProblemId());
-        Integer count = judgeStatusMapper.queryAllJudgeStatusByUsernameAndProblemId(judgeStatusPO.getUsername(), judgeStatusPO.getProblemId());
+        problemInfoMapper.updateProblemInfoTotalSubmitAddOne(problemId);
+        Integer count = judgeStatusMapper.queryAllJudgeStatusByUsernameAndProblemId(username, problemId);
         // 如果用户是第一次提交该题，则题目的总提交用户数+1
         if (count == 1) {
-            problemInfoMapper.updateProblemInfoTotalSubmitUserAddOne(judgeStatusPO.getProblemId());
+            problemInfoMapper.updateProblemInfoTotalSubmitUserAddOne(problemId);
+        }
+        // 查询解答记录表中该题的解答记录是否存在
+        Integer countSolvedRecord = userProblemSolvedMapper.queryUserProblemSolvedCountByUsernameAndProblemId(username, problemId);
+        if (countSolvedRecord == 0) {
+            UserProblemSolvedPO userProblemSolvedPO = new UserProblemSolvedPO();
+            userProblemSolvedPO.setUsername(username);
+            userProblemSolvedPO.setProblemId(problemId);
+            userProblemSolvedPO.setTryCount(1);
+            userProblemSolvedPO.setSolvedCount(0);
+            userProblemSolvedPO.setLastTryTime(new Date());
+            userProblemSolvedMapper.insertUserProblemSolved(userProblemSolvedPO);
+        } else {
+            // 尝试次数+1
+            userProblemSolvedMapper.updateUserProblemSolvedTryCountAddOne(username, problemId);
+            //
+            userProblemSolvedMapper.updateUserProblemSolvedLastTryTime(username, problemId);
         }
         return true;
     }
@@ -123,22 +145,35 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
             times--;
         } while (times > 0 && !quitLoop);
         // 200s的获取结果执行完毕或者拿到AC/CE编译的结果后执行
+        String username = judgeStatusPO.getUsername();
+        Integer problemId = judgeStatusPO.getProblemId();
         // 如果用户AC了这道题，执行的逻辑
         if ("AC".equalsIgnoreCase(judgingStr)) {
             // 题目 AC 数量加一
-            problemInfoMapper.updateProblemInfoTotalAcAddOne(judgeStatusPO.getProblemId());
+            problemInfoMapper.updateProblemInfoTotalAcAddOne(problemId);
             // 查询用户以前是否解决过该题
-            Integer count = judgeStatusMapper.queryAcJudgeStatusByUsernameAndProblemId(judgeStatusPO.getUsername(), judgeStatusPO.getProblemId());
-            if (count == 0) {
+            Integer count = judgeStatusMapper.queryAcJudgeStatusByUsernameAndProblemId(username, problemId);
+            // 如果是第一次解决该题
+            if (count == 1) {
                 // 用户AC数量加一
-                userBaseInfoMapper.updateUserBaseInfoAcNumAddOneByUsername(judgeStatusPO.getUsername());
+                userBaseInfoMapper.updateUserBaseInfoAcNumAddOneByUsername(username);
                 // 题目AC用户数量加一
-                problemInfoMapper.updateProblemInfoTotalAcUserAddOne(judgeStatusPO.getProblemId());
+                problemInfoMapper.updateProblemInfoTotalAcUserAddOne(problemId);
+            }
+            /* 更新题目解决表 */
+            // 解题ac次数加一
+            userProblemSolvedMapper.updateUserProblemSolvedSolvedCountAddOne(username, problemId);
+            // 查询题目解决表中是否有记录
+            UserProblemSolvedPO userSolvedRecord = userProblemSolvedMapper.queryUserProblemSolvedByUsernameAndProblemId(username, problemId);
+            // 如果第一次解答该题
+            if (userSolvedRecord.getSolvedCount() == 1) {
+                // 更新第一次解决时间
+                userProblemSolvedMapper.updateUserProblemSolvedFirstSolvedTime(username, problemId);
             }
             // TODO: 对挑战模式的更新逻辑
-        } else {
-            // 用户尝试过该题目，但没有解决
-
+        }
+        // 用户尝试过该题目，但没有解决
+        else {
         }
     }
 
@@ -259,4 +294,11 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
         judgeStatusVO.setId(viewJudgeStatusPO.getId());
         return judgeStatusVO;
     }
+
+    @Override
+    public Integer queryJudgeStatusCountByUsername(String username) {
+        return judgeStatusMapper.queryJudgeStatusCountByUsername(username);
+    }
+
+
 }

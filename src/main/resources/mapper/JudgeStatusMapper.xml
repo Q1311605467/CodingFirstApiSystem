@@ -83,5 +83,11 @@
         AND result = 1;
     </select>
 
+    <select id="queryJudgeStatusCountByUsername" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_judge_status
+        WHERE username = #{username};
+    </select>
+
 
 </mapper>

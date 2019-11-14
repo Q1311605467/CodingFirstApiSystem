@@ -1,8 +1,9 @@
 package com.fjut.cf.controller;
 
-import com.fjut.cf.pojo.vo.BorderHonorRankVO;
-import com.fjut.cf.pojo.vo.ResultJsonVO;
+import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.pojo.vo.*;
 import com.fjut.cf.service.BorderHonorRankService;
+import com.fjut.cf.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,8 @@ public class BorderController {
     @Autowired
     BorderHonorRankService borderHonorRankService;
 
+    @Autowired
+    UserInfoService userInfoService;
 
     @GetMapping("/honor_rank")
     public ResultJsonVO getHonorRankList(@RequestParam("pageNum") Integer pageNum,
@@ -28,6 +31,21 @@ public class BorderController {
         Integer count  = borderHonorRankService.queryBorderHonorRankCount();
         resultJsonVO.addInfo(borderHonorRankVOS);
         resultJsonVO.addInfo(count);
+        return resultJsonVO;
+    }
+
+    @GetMapping("/mini/get")
+    public ResultJsonVO getUserBorder(@RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("pageSize") Integer pageSize) {
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        Integer startIndex = (pageNum - 1) * pageSize;
+        List<UserRatingBorderVO> userRatingBorderVOS = userInfoService.queryRatingBorder(startIndex, pageSize);
+        List<UserAcNumBorderVO> userAcNumBorderVOS = userInfoService.queryAcNumBorder(startIndex, pageSize);
+        List<UserAcbBorderVO> userAcbBorderVOS = userInfoService.queryAcbBorder(startIndex, pageSize);
+        resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
+        resultJsonVO.addInfo(userRatingBorderVOS);
+        resultJsonVO.addInfo(userAcNumBorderVOS);
+        resultJsonVO.addInfo(userAcbBorderVOS);
         return resultJsonVO;
     }
 

@@ -24,4 +24,12 @@ public interface BorderHonorRankMapper {
      * @return
      */
     Integer queryBorderHonorRankCount();
+
+    /**
+     * 根据用户名查询用户参与榜单
+     *
+     * @param username
+     * @return
+     */
+    List<BorderHonorRankPO> queryBorderHonorRankByUsername(@Param("username") String username);
 }

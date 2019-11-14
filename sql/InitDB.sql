@@ -100,37 +100,61 @@ CREATE TABLE `t_user_auth`
 DROP TABLE IF EXISTS `t_user_custom_info`;
 CREATE TABLE `t_user_custom_info`
 (
-    id              INT PRIMARY KEY AUTO_INCREMENT,
-    username        VARCHAR(30) NOT NULL UNIQUE,
-    avatar_url      VARCHAR(255) COMMENT '用户头像url地址',
-    adjective_title VARCHAR(10) COMMENT '形容词头衔',
-    article_title   VARCHAR(10) COMMENT '名词头衔',
+    id           INT PRIMARY KEY AUTO_INCREMENT,
+    username     VARCHAR(30) NOT NULL UNIQUE,
+    avatar_url   TEXT COMMENT '用户头像url地址',
+    adjective_id INT COMMENT '形容词头衔ID',
+    article_id   INT COMMENT '名词头衔ID',
+    seal_id      INT COMMENT '印章ID',
     FOREIGN KEY (username) REFERENCES t_user_base_info (username)
 );
 
-# 用户头衔表
+# 全部头衔表
 DROP TABLE IF EXISTS `t_user_title`;
 CREATE TABLE `t_user_title`
 (
-    id              INT PRIMARY KEY AUTO_INCREMENT,
-    username        VARCHAR(30) NOT NULL UNIQUE,
-    type            INT COMMENT '头衔类型：0：未定义；1：形容词；2：名词头衔',
-    name            VARCHAR(10) NOT NULL COMMENT '头衔名称',
-    picture_url     VARCHAR(2047) COMMENT '头衔图片url',
-    validity_period INT DEFAULT -1 COMMENT '头衔有效期，单位：天，-1为永久',
-    FOREIGN KEY (username) REFERENCES t_user_base_info (username)
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    type        INT COMMENT '头衔类型：0：未定义；1：形容词；2：名词头衔',
+    name        VARCHAR(255) NOT NULL COMMENT '头衔名称',
+    picture_url TEXT COMMENT '头衔图片url，如果有',
+    life_time   INT DEFAULT -1 COMMENT '头衔有效时间，单位：天'
 );
 
-# 用户印章表
+# 用户头衔表
+DROP TABLE IF EXISTS `t_user_title_record`;
+CREATE TABLE `t_user_title_record`
+(
+    id           INT PRIMARY KEY AUTO_INCREMENT,
+    username     VARCHAR(30) NOT NULL UNIQUE,
+    title_id     INT         NOT NULL COMMENT '头衔ID',
+    obtain_time  DATETIME DEFAULT NOW() COMMENT '获得时间',
+    expired_time DATETIME COMMENT '过期时间',
+    FOREIGN KEY (username) REFERENCES t_user_base_info (username),
+    FOREIGN KEY (title_id) REFERENCES t_user_title (id)
+);
+
+# 全部印章表
 DROP TABLE IF EXISTS `t_user_seal`;
 CREATE TABLE `t_user_seal`
 (
-    id              INT PRIMARY KEY AUTO_INCREMENT,
-    username        VARCHAR(30)  NOT NULL UNIQUE,
-    name            VARCHAR(255) NOT NULL COMMENT '印章名称',
-    picture_url     VARCHAR(2047) COMMENT '印章图片url',
-    validity_period INT DEFAULT -1 COMMENT '印章有效期，单位：天，-1为永久',
-    FOREIGN KEY (username) REFERENCES t_user_base_info (username)
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    type        INT DEFAULT 0 COMMENT '目前未定义属性',
+    name        VARCHAR(255) COMMENT '印章名称',
+    picture_url TEXT NOT NULL COMMENT '印章图片url',
+    life_time   INT DEFAULT -1 COMMENT '印章有效时间，单位：天'
+);
+
+# 用户印章表
+DROP TABLE IF EXISTS `t_user_seal_record`;
+CREATE TABLE `t_user_seal_record`
+(
+    id           INT PRIMARY KEY AUTO_INCREMENT,
+    username     VARCHAR(30) NOT NULL UNIQUE,
+    seal_id      INT         NOT NULL COMMENT '印章ID',
+    obtain_time  DATETIME DEFAULT NOW() COMMENT '获得时间',
+    expired_time DATETIME COMMENT '过期时间',
+    FOREIGN KEY (username) REFERENCES t_user_base_info (username),
+    FOREIGN KEY (seal_id) REFERENCES t_user_seal (id)
 );
 
 DROP TABLE IF EXISTS `t_user_message`;
@@ -219,7 +243,8 @@ DROP TABLE IF EXISTS `t_problem_difficult`;
 CREATE TABLE `t_problem_difficult`
 (
     id              INT PRIMARY KEY AUTO_INCREMENT,
-    problem_id      INT UNIQUE,
+    problem_id      INT,
+    problem_type    INT DEFAULT 0 COMMENT '题目基本类型，0~6',
     difficult_level SMALLINT DEFAULT NULL COMMENT '难度级别 1~3 ，越高越难'
 );
 
@@ -343,9 +368,8 @@ DROP TABLE IF EXISTS `t_judge_result`;
 CREATE TABLE `t_judge_result`
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
-    judge_id INT COMMENT '评测ID',
-    info     MEDIUMTEXT NOT NULL COMMENT '评测返回的结果',
-    INDEX (judge_id)
+    judge_id INT COMMENT '评测ID' UNIQUE,
+    info     MEDIUMTEXT NOT NULL COMMENT '评测返回的结果'
 );
 
 # 用户解决题目表
@@ -475,7 +499,7 @@ CREATE TABLE `t_mall_goods`
     cost             INT         NOT NULL DEFAULT 0 COMMENT '所需价格',
     goods_type       INT COMMENT '商品大类类型：0：默认；1：实体物品；2：虚拟物品',
     stock            INT         NOT NULL DEFAULT -1 COMMENT '库存数量，-1为不限量',
-    description      TEXT        COMMENT '商品介绍',
+    description      TEXT COMMENT '商品介绍',
     picture_url      TEXT COMMENT '图片url地址',
     visible          TINYINT              DEFAULT 1 COMMENT '普通用户是否可见：0：不可见；1：可见',
     shelf_user       VARCHAR(30) COMMENT '上传用户',

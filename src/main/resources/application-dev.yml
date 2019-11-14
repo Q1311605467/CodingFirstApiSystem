@@ -20,6 +20,9 @@ logging:
 
 cf:
   config:
+    # 权限拦截器
+    authInterceptor:
+      enable: false
     # 线程池配置
     threadPool:
       corePoolSize: 10

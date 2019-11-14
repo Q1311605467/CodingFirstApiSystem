@@ -17,7 +17,7 @@ public interface UserCustomInfoMapper {
     Integer insertUserCustomInfo(@Param("userCustomInfoPO") UserCustomInfoPO userCustomInfoPO);
 
     /**
-     * 根据用户名 查询用户个性化信息
+     * 根据用户名查询用户个性化信息
      *
      * @param username
      * @return

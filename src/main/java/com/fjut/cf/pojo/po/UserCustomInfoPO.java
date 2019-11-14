@@ -7,8 +7,9 @@ public class UserCustomInfoPO {
     private Integer id;
     private String username;
     private String avatarUrl;
-    private String adjectiveTitle;
-    private String articleTitle;
+    private Integer adjectiveId;
+    private Integer articleId;
+    private Integer sealId;
 
     public Integer getId() {
         return id;
@@ -34,20 +35,28 @@ public class UserCustomInfoPO {
         this.avatarUrl = avatarUrl;
     }
 
-    public String getAdjectiveTitle() {
-        return adjectiveTitle;
+    public Integer getAdjectiveId() {
+        return adjectiveId;
     }
 
-    public void setAdjectiveTitle(String adjectiveTitle) {
-        this.adjectiveTitle = adjectiveTitle;
+    public void setAdjectiveId(Integer adjectiveId) {
+        this.adjectiveId = adjectiveId;
     }
 
-    public String getArticleTitle() {
-        return articleTitle;
+    public Integer getArticleId() {
+        return articleId;
     }
 
-    public void setArticleTitle(String articleTitle) {
-        this.articleTitle = articleTitle;
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
+    }
+
+    public Integer getSealId() {
+        return sealId;
+    }
+
+    public void setSealId(Integer sealId) {
+        this.sealId = sealId;
     }
 
     @Override
@@ -56,8 +65,8 @@ public class UserCustomInfoPO {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
-                ", adjectiveTitle='" + adjectiveTitle + '\'' +
-                ", articleTitle='" + articleTitle + '\'' +
+                ", adjectiveId=" + adjectiveId +
+                ", articleId=" + articleId +
                 '}';
     }
 }

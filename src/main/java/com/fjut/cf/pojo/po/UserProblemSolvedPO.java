@@ -11,8 +11,8 @@ public class UserProblemSolvedPO {
     private Integer problemId;
     private Integer tryCount;
     private Integer solvedCount;
-    private Date lastTryCount;
-    private Date firstTryCount;
+    private Date lastTryTime;
+    private Date firstSolvedTime;
 
     public Integer getId() {
         return id;
@@ -54,20 +54,20 @@ public class UserProblemSolvedPO {
         this.solvedCount = solvedCount;
     }
 
-    public Date getLastTryCount() {
-        return lastTryCount;
+    public Date getLastTryTime() {
+        return lastTryTime;
     }
 
-    public void setLastTryCount(Date lastTryCount) {
-        this.lastTryCount = lastTryCount;
+    public void setLastTryTime(Date lastTryTime) {
+        this.lastTryTime = lastTryTime;
     }
 
-    public Date getFirstTryCount() {
-        return firstTryCount;
+    public Date getFirstSolvedTime() {
+        return firstSolvedTime;
     }
 
-    public void setFirstTryCount(Date firstTryCount) {
-        this.firstTryCount = firstTryCount;
+    public void setFirstSolvedTime(Date firstSolvedTime) {
+        this.firstSolvedTime = firstSolvedTime;
     }
 
     @Override
@@ -78,8 +78,8 @@ public class UserProblemSolvedPO {
                 ", problemId=" + problemId +
                 ", tryCount=" + tryCount +
                 ", solvedCount=" + solvedCount +
-                ", lastTryCount=" + lastTryCount +
-                ", firstTryCount=" + firstTryCount +
+                ", lastTryCount=" + lastTryTime +
+                ", firstTryCount=" + firstSolvedTime +
                 '}';
     }
 }

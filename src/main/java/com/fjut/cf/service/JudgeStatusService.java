@@ -20,6 +20,8 @@ public interface JudgeStatusService {
 
     /**
      * 如果提交代码成功更新数据库内容
+     * 更新题目表
+     * 更新用户解答记录表
      *
      * @param judgeStatusPO
      * @return
@@ -82,5 +84,13 @@ public interface JudgeStatusService {
      * @return
      */
     JudgeStatusVO queryViewJudgeStatusById(Integer id);
+
+    /**
+     * 根据用户名查询评测记录条数
+     *
+     * @param username
+     * @return
+     */
+    Integer queryJudgeStatusCountByUsername(String username);
 
 }

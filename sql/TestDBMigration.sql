@@ -201,3 +201,14 @@ INSERT INTO cf_test.t_mall_goods
             buyLimit       as buy_limit,
             buyVerifyLimit as buy_verify_limit
      FROM ojtest.t_mall);
+
+# 迁移 t_problem_tag_record 到 t_problem_tag_record
+INSERT INTO cf_test.t_problem_tag_record
+    (SELECT null     as id,
+            username as username,
+            pid      as problem_id,
+            tagid    as tag_id,
+            now() as time,
+            rating   as confidence
+     FROM ojtest.t_problem_tag_record
+    );

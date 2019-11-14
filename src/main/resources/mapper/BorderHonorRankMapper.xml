@@ -10,4 +10,12 @@
     <select id="queryBorderHonorRankCount" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM t_border_honor_rank;
     </select>
+
+    <select id="queryBorderHonorRankByUsername" resultType="com.fjut.cf.pojo.po.BorderHonorRankPO">
+        SELECT * FROM t_border_honor_rank
+        WHERE username_one = #{username}
+        OR username_two = #{username}
+        OR username_three = #{username}
+        ORDER BY reward_date DESC
+    </select>
 </mapper>
