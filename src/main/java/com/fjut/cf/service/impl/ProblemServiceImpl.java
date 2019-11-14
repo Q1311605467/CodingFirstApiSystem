@@ -1,23 +1,16 @@
 package com.fjut.cf.service.impl;
 
-import com.fjut.cf.mapper.ProblemInfoMapper;
-import com.fjut.cf.mapper.ProblemMapper;
-import com.fjut.cf.mapper.ProblemSampleMapper;
-import com.fjut.cf.mapper.ProblemViewMapper;
+import com.fjut.cf.mapper.*;
 import com.fjut.cf.pojo.enums.OjId;
 import com.fjut.cf.pojo.enums.ProblemDifficultLevel;
-import com.fjut.cf.pojo.po.ProblemInfoPO;
-import com.fjut.cf.pojo.po.ProblemInfoWithDifficultPO;
-import com.fjut.cf.pojo.po.ProblemSamplePO;
-import com.fjut.cf.pojo.po.ProblemViewPO;
+import com.fjut.cf.pojo.po.*;
 import com.fjut.cf.pojo.vo.ProblemListVO;
 import com.fjut.cf.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author axiang [2019/10/22]
@@ -36,15 +29,31 @@ public class ProblemServiceImpl implements ProblemService {
     @Autowired
     ProblemMapper problemMapper;
 
+    @Autowired
+    UserProblemSolvedMapper userProblemSolvedMapper;
+
 
     @Override
-    public List<ProblemListVO> queryProblemListLimit(String title, Integer tagId, Integer startIndex, Integer pageSize) {
+    public List<ProblemListVO> queryProblemListLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize) {
         List<ProblemListVO> problemListVOS = new ArrayList<>();
         List<ProblemInfoWithDifficultPO> problemInfoWithDifficultPOS = problemMapper.queryProblemInfoWithDifficultAscLimit(title, tagId, startIndex, pageSize);
+        List<UserProblemSolvedPO> solvedProblems = userProblemSolvedMapper.queryUserProblemSolvedByUsername(username);
+        Map<Integer, Integer> map = new TreeMap<>();
+        for (UserProblemSolvedPO solvedProblem : solvedProblems) {
+            map.put(solvedProblem.getProblemId(), solvedProblem.getSolvedCount());
+        }
         for (ProblemInfoWithDifficultPO problemInfo : problemInfoWithDifficultPOS) {
             ProblemListVO problemListVO = new ProblemListVO();
-            //FIXME: 是否解决暂时置未解决
-            problemListVO.setIsSolved("？");
+            String isSolved = "？";
+            if (map.get(problemInfo.getProblemId()) == null) {
+
+            } else if (map.get(problemInfo.getProblemId()) >= 1) {
+                isSolved = "✔";
+            }
+            else{
+                isSolved = "X";
+            }
+            problemListVO.setIsSolved(isSolved);
             problemListVO.setProblemId(problemInfo.getProblemId());
             problemListVO.setTitle(problemInfo.getTitle());
             DecimalFormat decimalFormat = new DecimalFormat("0.00");

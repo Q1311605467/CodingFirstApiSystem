@@ -20,7 +20,6 @@
         #{userProblemSolvedPO.lastTryTime},
         #{userProblemSolvedPO.firstSolvedTime}
         );
-
     </insert>
 
     <update id="updateUserProblemSolvedTryCountAddOne">
@@ -51,16 +50,21 @@
        AND problem_id = #{problemId};
     </update>
 
+    <select id="queryUserProblemSolvedByUsername" resultType="com.fjut.cf.pojo.po.UserProblemSolvedPO">
+    SELECT * FROM t_user_problem_solved
+        WHERE username = #{username};
+    </select>
+
     <select id="queryUserProblemSolvedByUsernameAndProblemId" resultType="com.fjut.cf.pojo.po.UserProblemSolvedPO">
     SELECT * FROM t_user_problem_solved
         WHERE username = #{username}
-        AND problem_id = #{problemId}
+        AND problem_id = #{problemId};
     </select>
 
     <select id="queryUserProblemSolvedCountByUsernameAndProblemId" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM t_user_problem_solved
         WHERE username = #{username}
-        AND problem_id = #{problemId}
+        AND problem_id = #{problemId};
     </select>
 
     <select id="queryUserRadarVOByUsername" resultType="com.fjut.cf.pojo.vo.UserRadarVO">
@@ -73,6 +77,7 @@
         AND username=#{username}
         GROUP BY problem_type;
     </select>
+
 
 
 </mapper>

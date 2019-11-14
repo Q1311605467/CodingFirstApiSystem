@@ -14,13 +14,14 @@ public interface ProblemService {
     /**
      * 分页带条件查询题目展示详情
      *
+     * @param username
      * @param title
      * @param tagId
      * @param startIndex
      * @param pageSize
      * @return
      */
-    List<ProblemListVO> queryProblemListLimit(String title, Integer tagId, Integer startIndex, Integer pageSize);
+    List<ProblemListVO> queryProblemListLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize);
 
     /**
      * 带条件查询题目数量

@@ -55,6 +55,14 @@ public interface UserProblemSolvedMapper {
     Integer updateUserProblemSolvedLastTryTime(@Param("username") String username, @Param("problemId") Integer problemId);
 
     /**
+     * 根据用户名查找对应的用户解答记录
+     *
+     * @param username
+     * @return
+     */
+    List<UserProblemSolvedPO> queryUserProblemSolvedByUsername(@Param("username") String username);
+
+    /**
      * 根据用户名和题目ID查找对应记录
      *
      * @param username
