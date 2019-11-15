@@ -6,6 +6,7 @@ package com.fjut.cf.pojo.vo;
 public class ChallengeBlockProblemVO {
     private Integer id;
     private Integer blockId;
+    private String isSolved;
     private String title;
     private Integer problemOrder;
     private Integer problemId;
@@ -26,6 +27,14 @@ public class ChallengeBlockProblemVO {
 
     public void setBlockId(Integer blockId) {
         this.blockId = blockId;
+    }
+
+    public String getIsSolved() {
+        return isSolved;
+    }
+
+    public void setIsSolved(String isSolved) {
+        this.isSolved = isSolved;
     }
 
     public String getTitle() {
@@ -73,6 +82,7 @@ public class ChallengeBlockProblemVO {
         return "ChallengeBlockProblemVO{" +
                 "id=" + id +
                 ", blockId=" + blockId +
+                ", isSolved='" + isSolved + '\'' +
                 ", title='" + title + '\'' +
                 ", problemOrder=" + problemOrder +
                 ", problemId=" + problemId +

@@ -14,7 +14,7 @@
         on cbp.problem_id = tpi.problem_id
         WHERE cbp.block_id = #{blockId}
         ORDER BY cbp.problem_order ASC
-        LIMIT #{startIndex},#{pageSize};
+        LIMIT #{startIndex}, #{pageSize};
     </select>
 
     <select id="queryChallengeBlockProblemCountByBlockId" resultType="java.lang.Integer">

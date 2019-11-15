@@ -24,6 +24,7 @@ public class ChallengeBlockController {
     @Autowired
     ChallengeBlockProblemService challengeBlockProblemService;
 
+
     @PrivateRequired
     @GetMapping("/graph/get")
     public ResultJsonVO getUserOpenedChallengeBlock(@RequestParam("username") String username) {
@@ -56,6 +57,7 @@ public class ChallengeBlockController {
         return resultJsonVO;
     }
 
+    @PrivateRequired
     @GetMapping("/problem/get")
     public ResultJsonVO getBlockProblems(@RequestParam("username") String username,
                                          @RequestParam("blockId") Integer blockId,
@@ -63,7 +65,8 @@ public class ChallengeBlockController {
                                          @RequestParam("pageSize") Integer pageSize) {
         ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
         Integer startIndex = (pageNum - 1) * pageSize;
-        List<ChallengeBlockProblemVO> challengeBlockProblemVOS = challengeBlockProblemService.queryChallengeBlockProblemByBlockIdAscLimit(blockId, startIndex, pageSize);
+        List<ChallengeBlockProblemVO> challengeBlockProblemVOS = challengeBlockProblemService.queryChallengeBlockProblemByBlockIdAscLimit(username, blockId, startIndex, pageSize);
+
         Integer count = challengeBlockProblemService.queryChallengeBlockProblemCountByBlockId(blockId);
         if (challengeBlockProblemVOS.size() == 0 && count == 0) {
             resultJsonVO.setStatus(ResultJsonCode.RESOURCE_NOT_EXIST, "本模块没有题目");

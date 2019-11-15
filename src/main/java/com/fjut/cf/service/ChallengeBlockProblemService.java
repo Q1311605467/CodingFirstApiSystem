@@ -11,12 +11,14 @@ public interface ChallengeBlockProblemService {
     /**
      * 分页查询模块内的题目
      *
+     * @param username
      * @param blockId
      * @param startIndex
      * @param pageSize
      * @return
      */
-    List<ChallengeBlockProblemVO> queryChallengeBlockProblemByBlockIdAscLimit(Integer blockId,
+    List<ChallengeBlockProblemVO> queryChallengeBlockProblemByBlockIdAscLimit(String username,
+                                                                              Integer blockId,
                                                                               Integer startIndex,
                                                                               Integer pageSize);
 

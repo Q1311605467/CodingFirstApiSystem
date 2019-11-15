@@ -8,6 +8,7 @@ import com.fjut.cf.pojo.vo.ProblemListVO;
 import com.fjut.cf.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -36,22 +37,31 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<ProblemListVO> queryProblemListLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize) {
         List<ProblemListVO> problemListVOS = new ArrayList<>();
+        boolean needSolvedStatus = false;
         List<ProblemInfoWithDifficultPO> problemInfoWithDifficultPOS = problemMapper.queryProblemInfoWithDifficultAscLimit(title, tagId, startIndex, pageSize);
-        List<UserProblemSolvedPO> solvedProblems = userProblemSolvedMapper.queryUserProblemSolvedByUsername(username);
         Map<Integer, Integer> map = new TreeMap<>();
-        for (UserProblemSolvedPO solvedProblem : solvedProblems) {
-            map.put(solvedProblem.getProblemId(), solvedProblem.getSolvedCount());
+        if(!StringUtils.isEmpty(username))
+        {
+            needSolvedStatus  =true;
+            List<UserProblemSolvedPO> solvedProblems = userProblemSolvedMapper.queryUserProblemSolvedByUsername(username);
+
+            for (UserProblemSolvedPO solvedProblem : solvedProblems) {
+                map.put(solvedProblem.getProblemId(), solvedProblem.getSolvedCount());
+            }
         }
         for (ProblemInfoWithDifficultPO problemInfo : problemInfoWithDifficultPOS) {
             ProblemListVO problemListVO = new ProblemListVO();
-            String isSolved = "？";
-            if (map.get(problemInfo.getProblemId()) == null) {
-
-            } else if (map.get(problemInfo.getProblemId()) >= 1) {
-                isSolved = "✔";
-            }
-            else{
-                isSolved = "X";
+            String isSolved = "";
+            if(needSolvedStatus)
+            {
+                if (map.get(problemInfo.getProblemId()) == null) {
+                    isSolved = "";
+                } else if (map.get(problemInfo.getProblemId()) >= 1) {
+                    isSolved = "✔";
+                }
+                else{
+                    isSolved = "X";
+                }
             }
             problemListVO.setIsSolved(isSolved);
             problemListVO.setProblemId(problemInfo.getProblemId());

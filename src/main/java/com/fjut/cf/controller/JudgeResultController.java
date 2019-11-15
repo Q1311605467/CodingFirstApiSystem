@@ -1,5 +1,6 @@
 package com.fjut.cf.controller;
 
+import com.fjut.cf.component.interceptor.LoginRequired;
 import com.fjut.cf.pojo.enums.ResultJsonCode;
 import com.fjut.cf.pojo.po.JudgeResultPO;
 import com.fjut.cf.pojo.vo.JudgeStatusVO;
@@ -22,7 +23,7 @@ public class JudgeResultController {
     @Autowired
     JudgeResultService judgeResultService;
 
-
+    @LoginRequired
     @GetMapping("/info/get")
     public ResultJsonVO getJudgeResultByJudgeId(@RequestParam("judgeId")Integer judgeId)
     {

@@ -1,8 +1,8 @@
 package com.fjut.cf.controller;
 
-import com.fjut.cf.pojo.vo.ResultJsonVO;
-import com.fjut.cf.pojo.po.SystemInfoPO;
 import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.pojo.po.SystemInfoPO;
+import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

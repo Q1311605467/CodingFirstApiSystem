@@ -130,8 +130,8 @@ public class UserController {
         return resultJsonVO;
     }
 
-    @GetMapping("/info/get")
     @LoginRequired
+    @GetMapping("/info/get")
     public ResultJsonVO getUserInfoByUsername(@RequestParam("username") String username) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         UserBaseInfoPO userBaseInfoVO = userInfoService.queryUserInfoByUsername(username);
@@ -143,8 +143,8 @@ public class UserController {
         return resultJsonVO;
     }
 
-    @GetMapping("/award/get")
     @LoginRequired
+    @GetMapping("/award/get")
     public ResultJsonVO getUserAwardListByUsername(@RequestParam("username") String username) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         List<String> awardStr = borderHonorRankService.queryBorderHonorRankByUsername(username);
@@ -152,8 +152,8 @@ public class UserController {
         return resultJsonVO;
     }
 
-    @GetMapping("/radar/get")
     @LoginRequired
+    @GetMapping("/radar/get")
     public ResultJsonVO getUserRadarByUsername(@RequestParam("username") String username) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         List<UserRadarVO> userRadarVOS = userInfoService.queryUserRadarByUsername(username);

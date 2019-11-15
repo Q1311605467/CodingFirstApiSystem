@@ -1,5 +1,6 @@
 package com.fjut.cf.controller;
 
+import com.fjut.cf.component.interceptor.LoginRequired;
 import com.fjut.cf.pojo.enums.ResultJsonCode;
 import com.fjut.cf.pojo.po.MallGoodsPO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
@@ -20,6 +21,7 @@ public class MallController {
     @Autowired
     MallGoodsService mallGoodsService;
 
+    @LoginRequired
     @GetMapping("/list/get")
     public ResultJsonVO getMallGoodsList(@RequestParam("pageNum") Integer pageNum,
                                          @RequestParam("pageSize") Integer pageSize) {
@@ -32,6 +34,7 @@ public class MallController {
         return resultJsonVO;
     }
 
+    @LoginRequired
     @GetMapping("/info/get")
     public ResultJsonVO getMallGoodsByGoodsId(@RequestParam("id") Integer id) {
         ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
