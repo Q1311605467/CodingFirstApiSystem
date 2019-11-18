@@ -35,7 +35,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 
     @Override
-    public List<ProblemListVO> queryProblemListLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize) {
+    public List<ProblemListVO> queryProblemListByConditionsDescLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize) {
         List<ProblemListVO> problemListVOS = new ArrayList<>();
         boolean needSolvedStatus = false;
         List<ProblemInfoWithDifficultPO> problemInfoWithDifficultPOS = problemMapper.queryProblemInfoWithDifficultAscLimit(title, tagId, startIndex, pageSize);

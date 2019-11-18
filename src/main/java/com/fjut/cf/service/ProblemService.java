@@ -21,7 +21,7 @@ public interface ProblemService {
      * @param pageSize
      * @return
      */
-    List<ProblemListVO> queryProblemListLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize);
+    List<ProblemListVO> queryProblemListByConditionsDescLimit(String username, String title, Integer tagId, Integer startIndex, Integer pageSize);
 
     /**
      * 带条件查询题目数量

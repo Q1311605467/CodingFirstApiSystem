@@ -53,7 +53,7 @@ public class ProblemController {
             // 拼接查询字符串如果为空字符或者null则 置为null
             title = null;
         }
-        List<ProblemListVO> problemList = problemService.queryProblemListLimit(username, title, tagId, startIndex, pageSize);
+        List<ProblemListVO> problemList = problemService.queryProblemListByConditionsDescLimit(username, title, tagId, startIndex, pageSize);
         Integer integer = problemService.queryProblemTotalCount(title, tagId);
         resultJsonVO.addInfo(problemList);
         resultJsonVO.addInfo(integer);
