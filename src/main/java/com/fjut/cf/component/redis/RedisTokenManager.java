@@ -44,7 +44,6 @@ public class RedisTokenManager implements TokenManager {
             return false;
         }
         String token;
-        // FIXME: 报错为null
         token = (String) redisUtils.get(model.getUsername());
         if (StringUtils.isEmpty(token) || !token.equals(model.getToken())) {
             return false;

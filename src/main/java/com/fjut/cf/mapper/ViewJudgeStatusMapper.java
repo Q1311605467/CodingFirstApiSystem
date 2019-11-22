@@ -21,12 +21,14 @@ public interface ViewJudgeStatusMapper {
      * @param language
      * @return
      */
-    List<ViewJudgeStatusPO> queryViewJudgeStatusDescLimit(@Param("startIndex") Integer startIndex,
-                                                          @Param("pageSize") Integer pageSize,
-                                                          @Param("nick") String nick,
-                                                          @Param("problemId") Integer problemId,
-                                                          @Param("result") Integer result,
-                                                          @Param("language") Integer language);
+    List<ViewJudgeStatusPO> queryViewJudgeStatusDescLimit(
+            @Param("startIndex") Integer startIndex,
+            @Param("pageSize") Integer pageSize,
+            @Param("contestId") Integer contestId,
+            @Param("nick") String nick,
+            @Param("problemId") Integer problemId,
+            @Param("result") Integer result,
+            @Param("language") Integer language);
 
     /**
      * 根据条件查询视图的内容大小
@@ -37,10 +39,12 @@ public interface ViewJudgeStatusMapper {
      * @param language
      * @return
      */
-    Integer queryViewJudgeStatusCount(@Param("nick") String nick,
-                                      @Param("problemId") Integer problemId,
-                                      @Param("result") Integer result,
-                                      @Param("language") Integer language);
+    Integer queryViewJudgeStatusCount(
+            @Param("contestId") Integer contestId,
+            @Param("nick") String nick,
+            @Param("problemId") Integer problemId,
+            @Param("result") Integer result,
+            @Param("language") Integer language);
 
     /**
      * 根据评测ID查询评测记录

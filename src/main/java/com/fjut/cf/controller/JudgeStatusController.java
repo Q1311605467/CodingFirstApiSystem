@@ -34,8 +34,9 @@ public class JudgeStatusController {
     @GetMapping("/list/get")
     public ResultJsonVO getStatusList(@RequestParam("pageNum") Integer pageNum,
                                       @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam(value = "contestId", required = false) Integer contestId,
                                       @RequestParam(value = "nick", required = false) String nick,
-                                      @RequestParam(value = "problemId", required = false) String problemIdStr,
+                                      @RequestParam(value = "problemId", required = false) Integer problemId,
                                       @RequestParam(value = "result", required = false) String resultStr,
                                       @RequestParam(value = "language", required = false) String languageStr) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
@@ -51,11 +52,13 @@ public class JudgeStatusController {
         } else {
             nick = null;
         }
-        Integer problemId = null;
         Integer result = null;
         Integer language = null;
-        if (!StringUtils.isEmpty(problemIdStr)) {
-            problemId = Integer.parseInt(problemIdStr);
+        if (StringUtils.isEmpty(contestId)) {
+            contestId = null;
+        }
+        if (StringUtils.isEmpty(problemId)) {
+            problemId = null;
         }
         if (!StringUtils.isEmpty(resultStr)) {
             result = SubmitResult.getCodeByName(resultStr);
@@ -63,8 +66,8 @@ public class JudgeStatusController {
         if (!StringUtils.isEmpty(languageStr)) {
             language = CodeLanguage.getCodeByName(languageStr);
         }
-        List<JudgeStatusVO> judgeStatusVOS = judgeStatusService.queryJudgeStatusDescLimit(startIndex, pageSize, nick, problemId, result, language);
-        Integer length = judgeStatusService.queryViewJudgeStatusCount(nick, problemId, result, language);
+        List<JudgeStatusVO> judgeStatusVOS = judgeStatusService.queryJudgeStatusByConditionsDescLimit(startIndex, pageSize, contestId, nick, problemId, result, language);
+        Integer length = judgeStatusService.queryViewJudgeStatusCountByConditions(contestId, nick, problemId, result, language);
         resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
         resultJsonVO.addInfo(judgeStatusVOS);
         resultJsonVO.addInfo(length);
@@ -117,7 +120,7 @@ public class JudgeStatusController {
     }
 
     /**
-     * TODO: 本地判题
+     * 本地判题
      *
      * @param pid
      * @param timeLimit
@@ -186,7 +189,7 @@ public class JudgeStatusController {
         } catch (Exception e) {
             // 请求评测机出现异常，返回失败状态
             judgeStatusService.updateJudgeStatusWhenSubmitFail(localJudgeSubmitInfoBO.getRid());
-            resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL,"提交代码到本地评测机失败！");
+            resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "提交代码到本地评测机失败！");
             return resultJsonVO;
         }
         JSONObject jsonObject = JSONObject.parseObject(submitJsonStr);
@@ -196,13 +199,13 @@ public class JudgeStatusController {
             judgeStatusService.updateJudgeStatusWhenSubmitSuccess(judgeStatusPO);
             // 启用异步Service获取结果
             judgeStatusService.queryResultFromLocalJudgeAsync(judgeStatusPO);
-            resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS,"提交评测成功！");
+            resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS, "提交评测成功！");
         }
         // 如果请求评测机成功，但评测机返回失败结论
         else {
             // 更新数据库表，返回结果
             judgeStatusService.updateJudgeStatusWhenSubmitFail(localJudgeSubmitInfoBO.getRid());
-            resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL,"提交代码到本地评测机失败！");
+            resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "提交代码到本地评测机失败！");
         }
         return resultJsonVO;
     }

@@ -40,4 +40,12 @@ public interface ContestInfoMapper {
                                               @Param("searchTitle") String searchTitle,
                                               @Param("searchPermission") Integer searchPermission,
                                               @Param("searchStatus") Integer searchStatus);
+
+
+    /**
+     * 根据比赛ID查询比赛信息
+     * @param contestId
+     * @return
+     */
+    ContestInfoPO queryContestInfoByContestId(@Param("contestId") Integer contestId);
 }

@@ -38,7 +38,7 @@ public class ChallengeBlockController {
     }
 
     @GetMapping("/condition/get")
-    public ResultJsonVO getBlockConditionByBlockId(@RequestParam("blockId") Integer blockId) {
+    public ResultJsonVO getBlockCondition(@RequestParam("blockId") Integer blockId) {
         ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
         List<ChallengeBlockConditionVO> conditions = challengeBlockService.queryChallengeBlockConditionByBlockId(blockId);
         resultJsonVO.addInfo(conditions);
@@ -47,8 +47,8 @@ public class ChallengeBlockController {
 
     @PrivateRequired
     @GetMapping("/detail/get")
-    public ResultJsonVO getChallengeBlockDetailByBlockId(@RequestParam("blockId") Integer blockId,
-                                                         @RequestParam("username") String username) {
+    public ResultJsonVO getChallengeBlockDetail(@RequestParam("blockId") Integer blockId,
+                                                @RequestParam("username") String username) {
         ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
         ChallengeBlockVO challengeBlockVO = challengeBlockService.queryChallengeBlockByBlockIdAndUsername(blockId, username);
         List<ChallengeBlockConditionVO> conditionVOS = challengeBlockService.queryChallengeBlockConditionByBlockId(blockId);

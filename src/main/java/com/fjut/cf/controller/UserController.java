@@ -91,8 +91,7 @@ public class UserController {
                                          @RequestParam(value = "major", required = false) String major,
                                          @RequestParam(value = "cla", required = false) String cla,
                                          @RequestParam(value = "studentId", required = false) String studentId,
-                                         @RequestParam(value = "graduationDate", required = false) String graduationDateStr
-    ) {
+                                         @RequestParam(value = "graduationDate", required = false) String graduationDateStr) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         Boolean isExist = userInfoService.queryUserExistByUsername(username);
         if (isExist) {

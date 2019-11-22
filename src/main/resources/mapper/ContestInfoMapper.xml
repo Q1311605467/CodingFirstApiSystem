@@ -46,4 +46,9 @@
         </if>
         ;
     </select>
+
+    <select id="queryContestInfoByContestId" resultType="com.fjut.cf.pojo.po.ContestInfoPO">
+        SELECT * FROM t_contest_info
+        WHERE contest_id = #{contestId};
+    </select>
 </mapper>

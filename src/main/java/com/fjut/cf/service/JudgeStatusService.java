@@ -64,7 +64,7 @@ public interface JudgeStatusService {
      * @param language
      * @return
      */
-    List<JudgeStatusVO> queryJudgeStatusDescLimit(Integer startIndex, Integer pageSize, String nick, Integer problemId, Integer result, Integer language);
+    List<JudgeStatusVO> queryJudgeStatusByConditionsDescLimit(Integer startIndex, Integer pageSize, Integer contestId, String nick, Integer problemId, Integer result, Integer language);
 
     /**
      * 查询评测列表视图的大小
@@ -75,7 +75,7 @@ public interface JudgeStatusService {
      * @param language
      * @return
      */
-    Integer queryViewJudgeStatusCount(String nick, Integer problemId, Integer result, Integer language);
+    Integer queryViewJudgeStatusCountByConditions(Integer contestId, String nick, Integer problemId, Integer result, Integer language);
 
     /**
      * 根据评测ID查询评测列表视图

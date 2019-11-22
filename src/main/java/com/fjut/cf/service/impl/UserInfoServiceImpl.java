@@ -186,6 +186,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userRatingBorderVOS;
     }
 
+    /**
+     * TODO:
+     * @param username
+     * @return
+     */
     @Override
     public List<UserRadarVO> queryUserRadarByUsername(String username) {
         return null;

@@ -25,7 +25,7 @@ public class JudgeResultController {
 
     @LoginRequired
     @GetMapping("/info/get")
-    public ResultJsonVO getJudgeResultByJudgeId(@RequestParam("judgeId")Integer judgeId)
+    public ResultJsonVO getJudgeResult(@RequestParam("judgeId")Integer judgeId)
     {
         ResultJsonVO resultJsonVO = new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS);
         JudgeResultPO judgeResultPO = judgeResultService.queryJudgeResultByJudgeId(judgeId);

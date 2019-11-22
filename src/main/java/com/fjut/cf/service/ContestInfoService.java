@@ -1,5 +1,6 @@
 package com.fjut.cf.service;
 
+import com.fjut.cf.pojo.po.ContestInfoPO;
 import com.fjut.cf.pojo.vo.ContestListVO;
 
 import java.util.List;
@@ -40,4 +41,11 @@ public interface ContestInfoService {
                                         String searchTitle,
                                         Integer searchPermission,
                                         Integer searchStatus);
+
+    /**
+     * 根据比赛ID查询比赛信息
+     * @param contestId
+     * @return
+     */
+    ContestInfoPO queryContestInfoByContestId(Integer contestId);
 }

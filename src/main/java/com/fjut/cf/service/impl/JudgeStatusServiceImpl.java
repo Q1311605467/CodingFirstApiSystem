@@ -12,6 +12,7 @@ import com.fjut.cf.pojo.po.UserProblemSolvedPO;
 import com.fjut.cf.pojo.po.ViewJudgeStatusPO;
 import com.fjut.cf.pojo.vo.JudgeStatusVO;
 import com.fjut.cf.pojo.vo.StatusCountVO;
+import com.fjut.cf.service.ChallengeBlockService;
 import com.fjut.cf.service.JudgeStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -44,6 +45,9 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
 
     @Autowired
     UserProblemSolvedMapper userProblemSolvedMapper;
+
+    @Autowired
+    ChallengeBlockService challengeBlockService;
 
     @Autowired
     LocalJudgeHttpClient localJudgeHttpClient;
@@ -170,7 +174,8 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
                 // 更新第一次解决时间
                 userProblemSolvedMapper.updateUserProblemSolvedFirstSolvedTime(username, problemId);
             }
-            // TODO: 对挑战模式的更新逻辑
+            // 挑战模式的更新逻辑
+            challengeBlockService.updateOpenBlock(username, problemId);
         }
         // 用户尝试过该题目，但没有解决
         else {
@@ -242,9 +247,9 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
     }
 
     @Override
-    public List<JudgeStatusVO> queryJudgeStatusDescLimit(Integer startIndex, Integer pageSize, String nick, Integer problemId, Integer result, Integer language) {
+    public List<JudgeStatusVO> queryJudgeStatusByConditionsDescLimit(Integer startIndex, Integer pageSize, Integer contestId, String nick, Integer problemId, Integer result, Integer language) {
         List<JudgeStatusVO> judgeStatusVOS = new ArrayList<>();
-        List<ViewJudgeStatusPO> viewJudgeStatusPOS = viewJudgeStatusMapper.queryViewJudgeStatusDescLimit(startIndex, pageSize, nick, problemId, result, language);
+        List<ViewJudgeStatusPO> viewJudgeStatusPOS = viewJudgeStatusMapper.queryViewJudgeStatusDescLimit(startIndex, pageSize, contestId, nick, problemId, result, language);
         for (ViewJudgeStatusPO vjs : viewJudgeStatusPOS) {
             JudgeStatusVO judgeStatusVO = new JudgeStatusVO();
             judgeStatusVO.setId(vjs.getId());
@@ -268,8 +273,8 @@ public class JudgeStatusServiceImpl implements JudgeStatusService {
     }
 
     @Override
-    public Integer queryViewJudgeStatusCount(String nick, Integer problemId, Integer result, Integer language) {
-        return viewJudgeStatusMapper.queryViewJudgeStatusCount(nick, problemId, result, language);
+    public Integer queryViewJudgeStatusCountByConditions(Integer contestId, String nick, Integer problemId, Integer result, Integer language) {
+        return viewJudgeStatusMapper.queryViewJudgeStatusCount(contestId, nick, problemId, result, language);
     }
 
     @Override

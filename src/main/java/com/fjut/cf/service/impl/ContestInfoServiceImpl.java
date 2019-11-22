@@ -32,7 +32,7 @@ public class ContestInfoServiceImpl implements ContestInfoService {
         List<ContestInfoPO> contestInfos = contestInfoMapper.queryContestInfoByConditionsDescLimit(kind, searchTitle, searchPermission, searchStatus, startIndex, pageSize);
         for (ContestInfoPO contestInfo : contestInfos) {
             ContestListVO contestList = new ContestListVO();
-            contestList.setId(contestInfo.getId());
+            contestList.setId(contestInfo.getContestId());
             contestList.setTitle(contestInfo.getTitle());
             contestList.setKind(ContestKind.getNameByCode(contestInfo.getContestKind()));
             contestList.setBeginTime(contestInfo.getBeginTime());
@@ -57,6 +57,11 @@ public class ContestInfoServiceImpl implements ContestInfoService {
                                                Integer searchPermission,
                                                Integer searchStatus) {
         return contestInfoMapper.queryContestInfoCountByConditions(kind, searchTitle, searchPermission, searchStatus);
+    }
+
+    @Override
+    public ContestInfoPO queryContestInfoByContestId(Integer contestId) {
+        return contestInfoMapper.queryContestInfoByContestId(contestId);
     }
 
 
