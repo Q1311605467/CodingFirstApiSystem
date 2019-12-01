@@ -7,15 +7,17 @@
         (id,
         username,
         avatar_url,
-        adjective_title,
-        article_title
+        adjective_id,
+        article_id,
+        seal_id
         )
         VALUES
         (#{userCustomInfoPO.id},
         #{userCustomInfoPO.username},
         #{userCustomInfoPO.avatarUrl},
-        #{userCustomInfoPO.adjectiveTitle},
-        #{userCustomInfoPO.articleTitle}
+        #{userCustomInfoPO.adjectiveId},
+        #{userCustomInfoPO.articleId},
+        #{userCustomInfoPO.sealId}
         );
 
     </insert>

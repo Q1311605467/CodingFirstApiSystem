@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `t_user_base_info`;
 CREATE TABLE `t_user_base_info`
 (
     id              INT PRIMARY KEY AUTO_INCREMENT,
-    username        VARCHAR(16) NOT NULL UNIQUE COMMENT '16个英文字母的登录名',
+    username        VARCHAR(30) NOT NULL UNIQUE COMMENT '16个英文字母的登录名',
     nick            VARCHAR(8)  NOT NULL COMMENT '八个汉字或者八个字符',
     gender          SMALLINT COMMENT '性别，0为保密，1为男，2为女',
     email           VARCHAR(50) NOT NULL COMMENT '邮箱',
@@ -244,7 +244,7 @@ CREATE TABLE `t_problem_difficult`
 (
     id              INT PRIMARY KEY AUTO_INCREMENT,
     problem_id      INT,
-    problem_type    INT DEFAULT 0 COMMENT '题目基本类型，0~6',
+    problem_type    INT      DEFAULT 0 COMMENT '题目基本类型，0~6',
     difficult_level SMALLINT DEFAULT NULL COMMENT '难度级别 1~3 ，越高越难'
 );
 

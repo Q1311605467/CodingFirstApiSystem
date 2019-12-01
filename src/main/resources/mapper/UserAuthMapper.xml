@@ -68,11 +68,16 @@
     <select id="queryUserAuthAttemptNumberByUsername" resultType="java.lang.Integer">
         SELECT attempt_login_fail_count
         FROM t_user_auth
-        WHERE username = #{username}
+        WHERE username = #{username};
     </select>
 
     <select id="queryUserAuthUnlockTimeByUsername" resultType="java.util.Date">
         SELECT unlock_time FROM t_user_auth
-        WHERE username = #{username}
+        WHERE username = #{username};
+    </select>
+
+    <select id="queryUserAuthLockedByUsername" resultType="java.lang.Integer">
+        SELECT locked FROM t_user_auth
+        WHERE username = #{username};
     </select>
 </mapper>

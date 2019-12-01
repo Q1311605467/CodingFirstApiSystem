@@ -9,10 +9,7 @@ import com.fjut.cf.pojo.po.UserBaseInfoPO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.pojo.vo.UserCustomInfoVO;
 import com.fjut.cf.pojo.vo.UserRadarVO;
-import com.fjut.cf.service.BorderHonorRankService;
-import com.fjut.cf.service.JudgeStatusService;
-import com.fjut.cf.service.UserCheckInService;
-import com.fjut.cf.service.UserInfoService;
+import com.fjut.cf.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +26,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     UserInfoService userInfoService;
+
+    @Autowired
+    UserAuthService userAuthService;
 
     @Autowired
     UserCheckInService userCheckInService;
@@ -63,6 +63,12 @@ public class UserController {
             resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "您的账号已暂时被锁定，请稍后登录。如有疑问，请联系管理员");
             return resultJsonVO;
         }
+        Integer integer = userAuthService.queryUserAuthLockedByUsername(username);
+        if (integer == 1)
+        {
+            resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "您的账号还未激活，请到邮箱中点击激活！");
+            return resultJsonVO;
+        }
         if (userInfoService.doUserLogin(username, password)) {
             resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS, "登录成功！");
             UserCustomInfoVO userCustomInfoVO = userInfoService.queryUserCustomInfoByUsername(username);
@@ -82,7 +88,7 @@ public class UserController {
     public ResultJsonVO postUserRegister(@RequestParam("username") String username,
                                          @RequestParam("password") String password,
                                          @RequestParam("nick") String nick,
-                                         @RequestParam(value = "gender", required = false) Integer gender,
+                                         @RequestParam("gender") Integer gender,
                                          @RequestParam("email") String email,
                                          @RequestParam("phone") String phone,
                                          @RequestParam("motto") String motto,
@@ -91,7 +97,8 @@ public class UserController {
                                          @RequestParam(value = "major", required = false) String major,
                                          @RequestParam(value = "cla", required = false) String cla,
                                          @RequestParam(value = "studentId", required = false) String studentId,
-                                         @RequestParam(value = "graduationDate", required = false) String graduationDateStr) {
+                                         @RequestParam(value = "graduationYear", required = false) String graduationYear,
+                                         @RequestParam(value = "avatarUrl", required = false) String avatarUrl) {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         Boolean isExist = userInfoService.queryUserExistByUsername(username);
         if (isExist) {
@@ -111,8 +118,8 @@ public class UserController {
         userBaseInfo.setMajor(major);
         userBaseInfo.setCla(cla);
         userBaseInfo.setStudentId(studentId);
-        userBaseInfo.setGraduationYear(graduationDateStr);
-        Boolean ans = userInfoService.registerUser(userBaseInfo, password);
+        userBaseInfo.setGraduationYear(graduationYear);
+        Boolean ans = userInfoService.registerUser(userBaseInfo, password, avatarUrl);
         if (ans) {
             resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS, "用户注册成功！");
         } else {

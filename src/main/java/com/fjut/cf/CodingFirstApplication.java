@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.fjut.cf.mapper")
 @EnableTransactionManagement
 public class CodingFirstApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(CodingFirstApplication.class, args);
     }
-
 }

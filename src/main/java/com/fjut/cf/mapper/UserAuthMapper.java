@@ -94,5 +94,11 @@ public interface UserAuthMapper {
      */
     Date queryUserAuthUnlockTimeByUsername(@Param("username") String username);
 
-
+    /**
+     * 查询用户是否锁定
+     *
+     * @param username
+     * @return
+     */
+    Integer queryUserAuthLockedByUsername(@Param("username") String username);
 }

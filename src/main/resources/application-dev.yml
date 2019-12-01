@@ -36,6 +36,6 @@ cf:
       name: admin
       pwd: admin
     localJudgePath: http://192.168.122.129:8100
-    tempFilePath: D://
-    filePath: D://
-    picturePath: D://
+    tempFilePath: D://testfile/
+    filePath: D://testfile/
+    picturePath: D://testfile/pic/

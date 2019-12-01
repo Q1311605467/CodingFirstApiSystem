@@ -1,9 +1,9 @@
 package com.fjut.cf.controller;
 
+import com.fjut.cf.component.email.EmailTool;
 import com.fjut.cf.component.judge.local.LocalJudgeHttpClient;
 import com.fjut.cf.component.redis.RedisUtils;
 import com.fjut.cf.component.token.TokenManager;
-import com.fjut.cf.pojo.enums.ResultJsonCode;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.service.ChallengeBlockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test")
 public class TestController {
+    @Autowired
+    EmailTool emailTool;
+
     @Autowired
     RedisUtils redisUtils;
 
@@ -47,8 +50,8 @@ public class TestController {
 
     @GetMapping("/test1")
     public ResultJsonVO testMethod1() throws Exception {
-        //challengeBlockService.updateOpenBlock("axiangcoding", 1382);
-        challengeBlockService.updateOpenBlock("axiangcoding", 1480);
-        return new ResultJsonVO(ResultJsonCode.REQUIRED_SUCCESS,"hhh");
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        //emailTool.sendSimpleMailTest();
+        return resultJsonVO;
     }
 }

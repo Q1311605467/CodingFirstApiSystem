@@ -15,9 +15,10 @@ public interface UserInfoService {
      *
      * @param userBaseInfoPO
      * @param password
+     * @param avatarUrl
      * @return
      */
-    Boolean registerUser(UserBaseInfoPO userBaseInfoPO, String password);
+    Boolean registerUser(UserBaseInfoPO userBaseInfoPO, String password, String avatarUrl);
 
     /**
      * 用户登录

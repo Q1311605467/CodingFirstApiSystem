@@ -1,6 +1,8 @@
 package com.fjut.cf.service.impl;
 
+import com.fjut.cf.component.email.EmailTool;
 import com.fjut.cf.mapper.*;
+import com.fjut.cf.pojo.bo.SendEmailBO;
 import com.fjut.cf.pojo.po.*;
 import com.fjut.cf.pojo.vo.*;
 import com.fjut.cf.service.UserInfoService;
@@ -37,10 +39,15 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     UserTitleMapper userTitleMapper;
 
+    @Autowired
+    EmailTool emailTool;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Boolean registerUser(UserBaseInfoPO userBaseInfoPO, String password) {
-
+    public Boolean registerUser(UserBaseInfoPO userBaseInfoPO, String password, String avatarUrl) {
+        // 插入用户基本信息
+        int ans1 = userBaseInfoMapper.insertUserBaseInfo(userBaseInfoPO);
+        // 插入用户权限信息
         UserAuthPO userAuthPO = new UserAuthPO();
         Date currentTime = new Date();
         // 得到随机盐值
@@ -53,12 +60,23 @@ public class UserInfoServiceImpl implements UserInfoService {
         userAuthPO.setSalt(salt);
         userAuthPO.setPassword(encryptedPwd);
         userAuthPO.setAttemptLoginFailCount(0);
-        userAuthPO.setLocked(0);
+        // 新注册用户进行锁定
+        userAuthPO.setLocked(1);
         userAuthPO.setUnlockTime(currentTime);
         userAuthPO.setLastLoginTime(currentTime);
-        int ans1 = userBaseInfoMapper.insertUserBaseInfo(userBaseInfoPO);
         int ans2 = userAuthMapper.insertUserAuth(userAuthPO);
-        return ans1 == 1 && ans2 == 1;
+        // 插入头像路径
+        UserCustomInfoPO userCustomInfoPO = new UserCustomInfoPO();
+        userCustomInfoPO.setUsername(userBaseInfoPO.getUsername());
+        userCustomInfoPO.setAvatarUrl(avatarUrl);
+        Integer ans3 = userCustomInfoMapper.insertUserCustomInfo(userCustomInfoPO);
+        SendEmailBO sendEmailBO = new SendEmailBO();
+        sendEmailBO.setTo(userBaseInfoPO.getEmail());
+        sendEmailBO.setSubject("一码当先acm.fjutcoder.com注册激活邮件");
+        sendEmailBO.setText(userBaseInfoPO.getUsername() + "您好：\n"+"欢迎注册一码当先，请点击以下链接激活账号："
+        +"http://xxxxxxxx");
+        emailTool.sendEmail(sendEmailBO);
+        return ans1 == 1 && ans2 == 1 && ans3 == 1;
     }
 
     @Override
@@ -125,6 +143,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserCustomInfoVO queryUserCustomInfoByUsername(String username) {
         UserCustomInfoPO userCustomInfoPO = userCustomInfoMapper.queryUserCustomInfoByUsername(username);
+        if (null == userCustomInfoPO) {
+            return new UserCustomInfoVO();
+        }
         UserCustomInfoVO result = new UserCustomInfoVO();
         result.setId(userCustomInfoPO.getId());
         result.setUsername(userCustomInfoPO.getUsername());
@@ -188,6 +209,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     /**
      * TODO:
+     *
      * @param username
      * @return
      */

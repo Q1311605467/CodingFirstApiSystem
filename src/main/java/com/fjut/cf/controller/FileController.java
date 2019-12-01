@@ -22,8 +22,12 @@ public class FileController {
     @Value("${cf.config.filePath}")
     private String filePath;
 
+    @Value("${cf.config.picturePath}")
+    private String picturePath;
+
     @PostMapping("/upload")
-    public ResultJsonVO uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResultJsonVO uploadFile(@RequestParam("file") MultipartFile file,
+                                   @RequestParam("type") Integer type) throws Exception {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         String originalFileName = file.getOriginalFilename();
         int len = originalFileName.split("\\.").length;
@@ -32,7 +36,15 @@ public class FileController {
             suffix = originalFileName.split("\\.")[len - 1];
         }
         String newName = UUIDUtils.getUUID32() + "." +suffix;
-        String fileUrl = filePath + newName;
+        String fileUrl = "";
+        if(type == 0)
+        {
+            fileUrl = filePath + newName;
+        }
+        else if (type == 1)
+        {
+            fileUrl = picturePath + newName;
+        }
         InputStream is = file.getInputStream();
         OutputStream out = new FileOutputStream(fileUrl);
         IOUtils.copy(is, out);
@@ -42,4 +54,6 @@ public class FileController {
         resultJsonVO.addInfo("/image/"+newName);
         return resultJsonVO;
     }
+
+
 }
