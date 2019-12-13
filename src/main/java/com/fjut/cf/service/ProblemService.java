@@ -4,6 +4,7 @@ import com.fjut.cf.pojo.po.ProblemInfoPO;
 import com.fjut.cf.pojo.po.ProblemSamplePO;
 import com.fjut.cf.pojo.po.ProblemViewPO;
 import com.fjut.cf.pojo.vo.ProblemListVO;
+import com.fjut.cf.pojo.vo.UserRadarVO;
 
 import java.util.List;
 
@@ -52,5 +53,12 @@ public interface ProblemService {
      * @return
      */
     List<ProblemSamplePO> queryProblemSampleByProblemId(Integer problemId);
+
+    /**
+     * 查询用户题目雷达图
+     * @param username
+     * @return
+     */
+    List<UserRadarVO> queryUserProblemRadar(String username);
 
 }

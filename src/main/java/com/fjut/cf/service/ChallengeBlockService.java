@@ -1,6 +1,7 @@
 package com.fjut.cf.service;
 
 import com.fjut.cf.pojo.po.ChallengeBlockConditionPO;
+import com.fjut.cf.pojo.po.ChallengeUserOpenBlockPO;
 import com.fjut.cf.pojo.vo.ChallengeBlockConditionVO;
 import com.fjut.cf.pojo.vo.ChallengeBlockVO;
 import com.fjut.cf.pojo.vo.UserChallengeBlockVO;
@@ -11,6 +12,14 @@ import java.util.List;
  * @author axiang [2019/11/11]
  */
 public interface ChallengeBlockService {
+
+    /**
+     * 插入一条解锁记录并发送解锁消息
+     *
+     * @param challengeUserOpenBlockPO
+     * @return
+     */
+    Integer insertChallengeUserOpenBlock(ChallengeUserOpenBlockPO challengeUserOpenBlockPO);
 
     /**
      * 根据用户名查询挑战模式模块

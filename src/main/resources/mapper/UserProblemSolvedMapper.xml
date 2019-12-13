@@ -67,17 +67,19 @@
         AND problem_id = #{problemId};
     </select>
 
-    <select id="queryUserRadarVOByUsername" resultType="com.fjut.cf.pojo.vo.UserRadarVO">
-        SELECT username,
-                problem_type type,
-                COUNT(problem_type) score
-        FROM t_user_problem_solved ups, t_problem_difficult pd
-        WHERE ups.problem_id = pd.problem_id
-        AND solved_count > 0
-        AND username=#{username}
-        GROUP BY problem_type;
+    <select id="queryProblemTypeCountByUsername" resultType="com.fjut.cf.pojo.po.ProblemTypeCountPO">
+        SELECT COUNT(*) totalCount, problem_type
+        FROM t_problem_difficult tpd
+        WHERE tpd.problem_id in
+        (
+            SELECT problem_id
+            FROM t_user_problem_solved
+            WHERE solved_count >0
+            AND username=#{username}
+        )
+        GROUP BY problem_type
+        ORDER BY problem_type;
     </select>
-
 
 
 </mapper>

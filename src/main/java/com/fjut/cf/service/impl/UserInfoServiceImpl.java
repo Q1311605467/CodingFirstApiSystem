@@ -2,10 +2,10 @@ package com.fjut.cf.service.impl;
 
 import com.fjut.cf.component.email.EmailTool;
 import com.fjut.cf.mapper.*;
-import com.fjut.cf.pojo.bo.SendEmailBO;
 import com.fjut.cf.pojo.po.*;
 import com.fjut.cf.pojo.vo.*;
 import com.fjut.cf.service.UserInfoService;
+import com.fjut.cf.service.UserMessageService;
 import com.fjut.cf.util.SHAUtils;
 import com.fjut.cf.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     UserTitleMapper userTitleMapper;
 
     @Autowired
+    UserMessageService userMessageService;
+
+    @Autowired
     EmailTool emailTool;
 
     @Transactional(rollbackFor = Exception.class)
@@ -60,22 +63,31 @@ public class UserInfoServiceImpl implements UserInfoService {
         userAuthPO.setSalt(salt);
         userAuthPO.setPassword(encryptedPwd);
         userAuthPO.setAttemptLoginFailCount(0);
-        // 新注册用户进行锁定
-        userAuthPO.setLocked(1);
+        // FIXME: 新注册用户进行锁定，但由于邮箱服务问题暂时跳过该逻辑
+        userAuthPO.setLocked(0);
         userAuthPO.setUnlockTime(currentTime);
         userAuthPO.setLastLoginTime(currentTime);
         int ans2 = userAuthMapper.insertUserAuth(userAuthPO);
-        // 插入头像路径
+        // 插入头像信息
         UserCustomInfoPO userCustomInfoPO = new UserCustomInfoPO();
         userCustomInfoPO.setUsername(userBaseInfoPO.getUsername());
         userCustomInfoPO.setAvatarUrl(avatarUrl);
         Integer ans3 = userCustomInfoMapper.insertUserCustomInfo(userCustomInfoPO);
-        SendEmailBO sendEmailBO = new SendEmailBO();
-        sendEmailBO.setTo(userBaseInfoPO.getEmail());
-        sendEmailBO.setSubject("一码当先acm.fjutcoder.com注册激活邮件");
-        sendEmailBO.setText(userBaseInfoPO.getUsername() + "您好：\n"+"欢迎注册一码当先，请点击以下链接激活账号："
-        +"http://xxxxxxxx");
-        emailTool.sendEmail(sendEmailBO);
+        // 发送激活确认邮件
+        //SendEmailBO sendEmailBO = new SendEmailBO();
+        //sendEmailBO.setTo(userBaseInfoPO.getEmail());
+        //sendEmailBO.setSubject("一码当先acm.fjutcoder.com注册激活邮件");
+        //sendEmailBO.setText(userBaseInfoPO.getUsername() + "您好：\n"+"欢迎注册一码当先，请点击以下链接激活账号："
+        //+"http://xxxxxxxx");
+        //emailTool.sendEmail(sendEmailBO);
+        // 发送注册成功站内消息
+        UserMessagePO userMessagePO = new UserMessagePO();
+        userMessagePO.setUsername(userBaseInfoPO.getUsername());
+        userMessagePO.setTitle("欢迎注册一码当先在线编程系统");
+        userMessagePO.setStatus(0);
+        userMessagePO.setText("欢迎注册一码当先在线编程系统，目前我们正在进行内测，功能并未完全开发完毕，如果遇到错误，请通过页面最下方的bug反馈进行反馈哦");
+        userMessagePO.setTime(new Date());
+        userMessageService.insertUserMessage(userMessagePO);
         return ans1 == 1 && ans2 == 1 && ans3 == 1;
     }
 
@@ -205,17 +217,6 @@ public class UserInfoServiceImpl implements UserInfoService {
             userRatingBorderVOS.add(userRatingBorderVO);
         }
         return userRatingBorderVOS;
-    }
-
-    /**
-     * TODO:
-     *
-     * @param username
-     * @return
-     */
-    @Override
-    public List<UserRadarVO> queryUserRadarByUsername(String username) {
-        return null;
     }
 
 }

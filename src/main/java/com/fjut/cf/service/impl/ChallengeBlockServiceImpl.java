@@ -8,10 +8,12 @@ import com.fjut.cf.pojo.enums.ChallengeBlockType;
 import com.fjut.cf.pojo.po.ChallengeBlockConditionPO;
 import com.fjut.cf.pojo.po.ChallengeBlockPO;
 import com.fjut.cf.pojo.po.ChallengeUserOpenBlockPO;
+import com.fjut.cf.pojo.po.UserMessagePO;
 import com.fjut.cf.pojo.vo.ChallengeBlockConditionVO;
 import com.fjut.cf.pojo.vo.ChallengeBlockVO;
 import com.fjut.cf.pojo.vo.UserChallengeBlockVO;
 import com.fjut.cf.service.ChallengeBlockService;
+import com.fjut.cf.service.UserMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,22 @@ public class ChallengeBlockServiceImpl implements ChallengeBlockService {
     @Autowired
     ChallengeUserOpenBlockMapper challengeUserOpenBlockMapper;
 
+    @Autowired
+    UserMessageService userMessageService;
+
+
+    @Override
+    public Integer insertChallengeUserOpenBlock(ChallengeUserOpenBlockPO challengeUserOpenBlockPO) {
+        Integer integer = challengeUserOpenBlockMapper.insertChallengeUserOpenBlock(challengeUserOpenBlockPO);
+        UserMessagePO userMessagePO = new UserMessagePO();
+        userMessagePO.setUsername(challengeUserOpenBlockPO.getUsername());
+        userMessagePO.setTime(challengeUserOpenBlockPO.getUnlockTime());
+        userMessagePO.setTitle("恭喜您解锁了新的挑战模式模块！");
+        userMessagePO.setText("恭喜您解锁了新的挑战模式模块，快进去看看吧");
+        userMessagePO.setStatus(0);
+        userMessageService.insertUserMessage(userMessagePO);
+        return integer;
+    }
 
     @Override
     public List<UserChallengeBlockVO> queryUserChallengeBlockByUsername(String username) {

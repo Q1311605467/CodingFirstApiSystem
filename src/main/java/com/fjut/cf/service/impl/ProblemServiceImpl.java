@@ -3,8 +3,10 @@ package com.fjut.cf.service.impl;
 import com.fjut.cf.mapper.*;
 import com.fjut.cf.pojo.enums.OjId;
 import com.fjut.cf.pojo.enums.ProblemDifficultLevel;
+import com.fjut.cf.pojo.enums.ProblemType;
 import com.fjut.cf.pojo.po.*;
 import com.fjut.cf.pojo.vo.ProblemListVO;
+import com.fjut.cf.pojo.vo.UserRadarVO;
 import com.fjut.cf.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +30,16 @@ public class ProblemServiceImpl implements ProblemService {
     ProblemSampleMapper problemSampleMapper;
 
     @Autowired
+    ProblemDifficultMapper problemDifficultMapper;
+
+    @Autowired
     ProblemMapper problemMapper;
 
     @Autowired
     UserProblemSolvedMapper userProblemSolvedMapper;
+
+    @Autowired
+    ProblemTagRecordMapper problemTagRecordMapper;
 
 
     @Override
@@ -40,9 +48,8 @@ public class ProblemServiceImpl implements ProblemService {
         boolean needSolvedStatus = false;
         List<ProblemInfoWithDifficultPO> problemInfoWithDifficultPOS = problemMapper.queryProblemInfoWithDifficultAscLimit(title, tagId, startIndex, pageSize);
         Map<Integer, Integer> map = new TreeMap<>();
-        if(!StringUtils.isEmpty(username))
-        {
-            needSolvedStatus  =true;
+        if (!StringUtils.isEmpty(username)) {
+            needSolvedStatus = true;
             List<UserProblemSolvedPO> solvedProblems = userProblemSolvedMapper.queryUserProblemSolvedByUsername(username);
 
             for (UserProblemSolvedPO solvedProblem : solvedProblems) {
@@ -52,14 +59,12 @@ public class ProblemServiceImpl implements ProblemService {
         for (ProblemInfoWithDifficultPO problemInfo : problemInfoWithDifficultPOS) {
             ProblemListVO problemListVO = new ProblemListVO();
             String isSolved = "";
-            if(needSolvedStatus)
-            {
+            if (needSolvedStatus) {
                 if (map.get(problemInfo.getProblemId()) == null) {
                     isSolved = "";
                 } else if (map.get(problemInfo.getProblemId()) >= 1) {
                     isSolved = "✔";
-                }
-                else{
+                } else {
                     isSolved = "X";
                 }
             }
@@ -100,5 +105,33 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<ProblemSamplePO> queryProblemSampleByProblemId(Integer problemId) {
         return problemSampleMapper.queryProblemSampleByProblemId(problemId);
+    }
+
+
+    @Override
+    public List<UserRadarVO> queryUserProblemRadar(String username) {
+        List<ProblemTypeCountPO> problemTypeCounts = problemDifficultMapper.queryProblemTypeCount();
+        List<ProblemTypeCountPO> userProblemTypeCounts = userProblemSolvedMapper.queryProblemTypeCountByUsername(username);
+
+        List<UserRadarVO> results = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 0);
+        map.put(1, 0);
+        map.put(2, 0);
+        map.put(3, 0);
+        map.put(4, 0);
+        map.put(5, 0);
+        map.put(6, 0);
+        for (ProblemTypeCountPO userPtc : userProblemTypeCounts) {
+            map.put(userPtc.getProblemType(), userPtc.getTotalCount() == null ? 0 : userPtc.getTotalCount());
+        }
+
+        for (ProblemTypeCountPO ptc : problemTypeCounts) {
+            UserRadarVO userRadarVO = new UserRadarVO();
+            userRadarVO.setType(ProblemType.getNameByID(ptc.getProblemType()));
+            userRadarVO.setScore(100 * map.get(ptc.getProblemType()) / ptc.getTotalCount());
+            results.add(userRadarVO);
+        }
+        return results;
     }
 }

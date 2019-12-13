@@ -8,6 +8,15 @@ import java.util.List;
  * @author axiang [2019/11/11]
  */
 public interface UserMessageService {
+    /**
+     * 插入一条邮件信息
+     *
+     * @param userMessagePO
+     * @return
+     */
+    Integer insertUserMessage(UserMessagePO userMessagePO);
+
+
 
     /**
      * 设置用户的特定消息已读

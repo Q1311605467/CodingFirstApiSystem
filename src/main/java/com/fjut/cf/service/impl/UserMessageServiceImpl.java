@@ -17,6 +17,11 @@ public class UserMessageServiceImpl implements UserMessageService {
     UserMessageMapper userMessageMapper;
 
     @Override
+    public Integer insertUserMessage(UserMessagePO userMessagePO) {
+        return userMessageMapper.insertUserMessage(userMessagePO);
+    }
+
+    @Override
     public Integer updateUserMessageStatusSetReadByUsernameAndId(String username, Integer id) {
         return userMessageMapper.updateUserMessageStatusSetReadByUsernameAndId(username, id);
     }

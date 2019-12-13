@@ -105,14 +105,7 @@ public interface UserInfoService {
      */
     List<UserRatingBorderVO> queryRatingBorder(int startIndex, int pageSize);
 
-    /**
-     * 根据用户名查询用户能力雷达
-     * TODO：目前没做加权，只是简单计算解答数量！
-     *
-     * @param username
-     * @return
-     */
-    List<UserRadarVO> queryUserRadarByUsername(String username);
+
 
 
 }

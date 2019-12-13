@@ -69,10 +69,10 @@ public class ResultJsonVO {
 
     @Override
     public String toString() {
-        return "ResultJsonVO{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
-                ", datas=" + datas +
-                '}';
+        return "ResultJsonVO {\n" +
+                " code=" + code +
+                ",\n msg='" + msg + '\'' +
+                ",\n datas= \"不允许查看\"" +
+                "\n}";
     }
 }

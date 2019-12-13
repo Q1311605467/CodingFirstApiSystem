@@ -1,7 +1,7 @@
 package com.fjut.cf.mapper;
 
+import com.fjut.cf.pojo.po.ProblemTypeCountPO;
 import com.fjut.cf.pojo.po.UserProblemSolvedPO;
-import com.fjut.cf.pojo.vo.UserRadarVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -80,11 +80,11 @@ public interface UserProblemSolvedMapper {
      */
     Integer queryUserProblemSolvedCountByUsernameAndProblemId(@Param("username") String username, @Param("problemId") Integer problemId);
 
+
+
     /**
-     * 查询用户在不同题目类型上的解答数据
-     *
-     * @param username
+     * 查询用户完成题目中的题目类型总计
      * @return
      */
-    List<UserRadarVO> queryUserRadarVOByUsername(@Param("username") String username);
+    List<ProblemTypeCountPO> queryProblemTypeCountByUsername(@Param("username") String username);
 }

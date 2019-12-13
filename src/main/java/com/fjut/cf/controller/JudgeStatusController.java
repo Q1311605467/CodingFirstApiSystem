@@ -108,12 +108,7 @@ public class JudgeStatusController {
             StatusCountVO statusCountVO = hashMap.get(date);
             ans.add(statusCountVO);
         }
-        Collections.sort(ans, new Comparator<StatusCountVO>() {
-            @Override
-            public int compare(StatusCountVO sc1, StatusCountVO sc2) {
-                return sc1.getSubmitDay().compareTo(sc2.getSubmitDay()); //按时间升序
-            }
-        });
+        Collections.sort(ans, Comparator.comparing(StatusCountVO::getSubmitDay)); //按时间升序
         resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
         resultJsonVO.addInfo(ans);
         return resultJsonVO;

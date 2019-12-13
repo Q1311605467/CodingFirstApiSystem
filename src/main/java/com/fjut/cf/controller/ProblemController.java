@@ -7,6 +7,7 @@ import com.fjut.cf.pojo.po.ProblemViewPO;
 import com.fjut.cf.pojo.po.UserProblemSolvedPO;
 import com.fjut.cf.pojo.vo.ProblemListVO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
+import com.fjut.cf.pojo.vo.UserRadarVO;
 import com.fjut.cf.service.ProblemService;
 import com.fjut.cf.service.ProblemTagService;
 import com.fjut.cf.service.UserProblemSolvedService;
@@ -74,6 +75,15 @@ public class ProblemController {
         resultJsonVO.addInfo(problemViewPO);
         resultJsonVO.addInfo(problemSamplePOS);
         resultJsonVO.addInfo(isSolved);
+        return resultJsonVO;
+    }
+
+    @GetMapping("/radar/get")
+    public ResultJsonVO getProblemRadarByUsername(@RequestParam("username") String username)
+    {
+        ResultJsonVO resultJsonVO = new ResultJsonVO();
+        List<UserRadarVO> userRadarVOS = problemService.queryUserProblemRadar(username);
+        resultJsonVO.addInfo(userRadarVOS);
         return resultJsonVO;
     }
 

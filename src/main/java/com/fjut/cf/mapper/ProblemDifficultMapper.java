@@ -1,6 +1,7 @@
 package com.fjut.cf.mapper;
 
 import com.fjut.cf.pojo.po.ProblemDifficultPO;
+import com.fjut.cf.pojo.po.ProblemTypeCountPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.List;
  * @author axiang [2019/10/22]
  */
 public interface ProblemDifficultMapper {
-
     /**
      * 插入一条难度记录
      *
@@ -34,4 +34,12 @@ public interface ProblemDifficultMapper {
      * @return
      */
     List<ProblemDifficultPO> queryProblemDifficultDescLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 查询题目类型总计
+     * @return
+     */
+    List<ProblemTypeCountPO> queryProblemTypeCount();
+
+
 }

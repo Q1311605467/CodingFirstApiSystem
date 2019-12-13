@@ -32,4 +32,11 @@
         ORDER BY problem_id DESC
         LIMIT #{startIndex}, #{pageSize};
     </select>
+
+    <select id="queryProblemTypeCount" resultType="com.fjut.cf.pojo.po.ProblemTypeCountPO">
+        SELECT COUNT(*) total_count, problem_type
+        FROM t_problem_difficult
+        GROUP BY problem_type
+        ORDER BY problem_type;
+    </select>
 </mapper>

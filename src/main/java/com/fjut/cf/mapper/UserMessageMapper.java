@@ -9,6 +9,15 @@ import java.util.List;
  * @author axiang [2019/11/11]
  */
 public interface UserMessageMapper {
+
+    /**
+     * 插入一条邮件信息
+     *
+     * @param userMessagePO
+     * @return
+     */
+    Integer insertUserMessage(@Param("userMessagePO") UserMessagePO userMessagePO);
+
     /**
      * 设置用户特定的消息已读
      * @param username

@@ -5,10 +5,10 @@ import com.fjut.cf.component.interceptor.PrivateRequired;
 import com.fjut.cf.component.token.TokenManager;
 import com.fjut.cf.component.token.TokenModel;
 import com.fjut.cf.pojo.enums.ResultJsonCode;
+import com.fjut.cf.pojo.po.ChallengeUserOpenBlockPO;
 import com.fjut.cf.pojo.po.UserBaseInfoPO;
 import com.fjut.cf.pojo.vo.ResultJsonVO;
 import com.fjut.cf.pojo.vo.UserCustomInfoVO;
-import com.fjut.cf.pojo.vo.UserRadarVO;
 import com.fjut.cf.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -38,6 +38,9 @@ public class UserController {
 
     @Autowired
     BorderHonorRankService borderHonorRankService;
+
+    @Autowired
+    ChallengeBlockService challengeBlockService;
 
     @Autowired
     TokenManager tokenManager;
@@ -122,6 +125,12 @@ public class UserController {
         Boolean ans = userInfoService.registerUser(userBaseInfo, password, avatarUrl);
         if (ans) {
             resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS, "用户注册成功！");
+            // 插入挑战模式解锁记录
+            ChallengeUserOpenBlockPO challengeUserOpenBlockPO = new ChallengeUserOpenBlockPO();
+            challengeUserOpenBlockPO.setUsername(username);
+            challengeUserOpenBlockPO.setBlockId(1);
+            challengeUserOpenBlockPO.setUnlockTime(new Date());
+            challengeBlockService.insertChallengeUserOpenBlock(challengeUserOpenBlockPO);
         } else {
             resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "用户注册失败！");
         }
@@ -157,16 +166,6 @@ public class UserController {
         resultJsonVO.addInfo(awardStr);
         return resultJsonVO;
     }
-
-    @LoginRequired
-    @GetMapping("/radar/get")
-    public ResultJsonVO getUserRadarByUsername(@RequestParam("username") String username) {
-        ResultJsonVO resultJsonVO = new ResultJsonVO();
-        List<UserRadarVO> userRadarVOS = userInfoService.queryUserRadarByUsername(username);
-        resultJsonVO.addInfo(userRadarVOS);
-        return resultJsonVO;
-    }
-
 
 }
 

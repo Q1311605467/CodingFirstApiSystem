@@ -531,10 +531,24 @@ CREATE TABLE `t_acb_record`
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,
     username   VARCHAR(30) NOT NULL,
-    acb_change INT         NOT NULL,
+    current_acb INT         NOT NULL COMMENT '记录时的ACB数量',
     reason     INT         NOT NULL DEFAULT 0 COMMENT 'ACB变更原因：0：默认；',
     time       DATETIME             DEFAULT NOW() COMMENT '记录时间',
     mark       VARCHAR(255) COMMENT '原因标记'
+);
+
+### ------------------------------------------------------------------------------------------ ###
+
+# 积分变更账单
+DROP TABLE IF EXISTS `t_rating_record`;
+CREATE TABLE `t_rating_record`
+(
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    username       VARCHAR(30) NOT NULL,
+    current_rating INT         NOT NULL COMMENT '记录时的积分值',
+    reason         INT         NOT NULL DEFAULT 0 COMMENT '积分变更原因：0：默认；',
+    time           DATETIME             DEFAULT NOW() COMMENT '记录时间',
+    mark           VARCHAR(255) COMMENT '原因标记'
 );
 
 ### ------------------------------------------------------------------------------------------ ###

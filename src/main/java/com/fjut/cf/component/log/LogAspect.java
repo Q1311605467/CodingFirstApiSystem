@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -28,6 +29,12 @@ import java.util.Objects;
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Value("${cf.config.controllerLog.enable}")
+    private boolean controllerLogEnable;
+
+    @Value("${cf.config.handlerLog.enable}")
+    private boolean handlerLogEnable;
+
     /**
      * 切点为controller层的所有方法，  ..表示包和子包
      */
@@ -35,59 +42,76 @@ public class LogAspect {
     public void controllerMethod() {
     }
 
-    @Pointcut("execution(public * com.fjut.cf.handler..*.*(..))")
+    @Pointcut("execution(public * com.fjut.cf.component.handler..*.*(..))")
     public void handlerMethod() {
     }
 
     @Before("controllerMethod()")
-    public void logBeforeRequest(JoinPoint joinPoint) throws Exception {
+    public void logBeforeRequest(JoinPoint joinPoint) {
+        if (controllerLogEnable) {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
 
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
+            StringBuilder logStr = new StringBuilder();
+            logStr.append("\n============= 进入Controller =============\n");
+            logStr.append("请求信息：").append("请求路径 = \"").append(request.getRequestURI()).append("\",\n")
+                    .append("HTTP请求方法 = \"").append(request.getMethod()).append("\",\n")
+                    .append("IP地址 = \"").append(IpUtils.getClientIpAddress(request)).append("\",\n")
+                    .append("处理方法名称 = \"").append(joinPoint.getSignature().getDeclaringTypeName()).append(".").append(joinPoint.getSignature().getName()).append("\",\n");
 
-        StringBuilder logStr = new StringBuilder();
-        logStr.append("\n=============进入Controller=============\n");
-        logStr.append("请求信息：").append("URL = {").append(request.getRequestURI()).append("},\n")
-                .append("HTTP_METHOD = {").append(request.getMethod()).append("},\n")
-                .append("IP = {").append(IpUtils.getClientIpAddress(request)).append("},\n")
-                .append("CLASS_METHOD = {").append(joinPoint.getSignature().getDeclaringTypeName()).append(".").append(joinPoint.getSignature().getName()).append("},\n");
-
-        if (joinPoint.getArgs().length == 0) {
-            logStr.append("ARGS = {} ");
-        } else {
-            logStr.append("ARGS = {");
-            Object[] paramValues = joinPoint.getArgs();
-            String[] paramNames = ((CodeSignature) joinPoint.getSignature()).getParameterNames();
-            for (int i = 0; i < paramNames.length; i++) {
-                logStr.append(paramNames[i]).append(": ").append(paramValues[i]).append(", ");
+            if (joinPoint.getArgs().length == 0) {
+                logStr.append("参数 = {} ");
+            } else {
+                logStr.append("参数 = {\n");
+                Object[] paramValues = joinPoint.getArgs();
+                String[] paramNames = ((CodeSignature) joinPoint.getSignature()).getParameterNames();
+                for (int i = 0; i < paramNames.length - 1; i++) {
+                    logStr.append(" ").append(paramNames[i]).append(": ").append(paramValues[i]).append(", \n");
+                }
+                logStr.append(" ").append(paramNames[paramNames.length - 1]).append(": ").append(paramValues[paramNames.length - 1]).append("\n");
+                logStr.append("}\n");
             }
-            logStr.append("}\n");
+            logger.info(logStr.toString());
+        } else {
+
         }
-        logger.info(logStr.toString());
+
     }
 
     @AfterReturning(returning = "resultJsonVO", pointcut = "controllerMethod()")
     public void logAfterRequestReturning(ResultJsonVO resultJsonVO) {
-        String requestLog = "\n请求结果：" + resultJsonVO.toString() +
-                "\n=============离开Controller=============\n";
-        logger.info(requestLog);
+        if (controllerLogEnable) {
+            String requestLog = "\n请求结果：\n" + resultJsonVO.toString() +
+                    "\n============= 离开Controller =============\n";
+            logger.info(requestLog);
+        } else {
+
+        }
 
     }
 
     @Before("handlerMethod()")
     public void logBeforeHandler(JoinPoint joinPoint) {
-        StringBuilder logStr = new StringBuilder();
-        logStr.append("\n=============进入ExceptionHandler=============\n");
-        logStr.append("CLASS_METHOD = {").append(joinPoint.getSignature().getDeclaringTypeName()).append(".").append(joinPoint.getSignature().getName()).append("},\n");
-        logger.info(logStr.toString());
+        if (handlerLogEnable) {
+            StringBuilder logStr = new StringBuilder();
+            logStr.append("\n============= 进入ExceptionHandler =============\n");
+            logStr.append("处理方法名称 = {").append(joinPoint.getSignature().getDeclaringTypeName()).append(".").append(joinPoint.getSignature().getName()).append("},\n");
+            logger.info(logStr.toString());
+        } else {
+
+        }
+
     }
 
     @AfterReturning(returning = "resultJsonVO", pointcut = "handlerMethod()")
     public void logAfterHandlerReturning(ResultJsonVO resultJsonVO) {
-        String logStr = "\n请求结果：" + resultJsonVO.toString() +
-                "\n=============离开ExceptionHandler=============\n";
-        logger.info(logStr);
+        if (handlerLogEnable) {
+            String logStr = "\n请求结果：\n" + resultJsonVO.toString() +
+                    "\n============= 离开ExceptionHandler =============\n";
+            logger.info(logStr);
+        } else {
 
+        }
     }
 
 }
