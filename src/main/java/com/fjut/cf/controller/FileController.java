@@ -35,14 +35,11 @@ public class FileController {
         if (len > 0) {
             suffix = originalFileName.split("\\.")[len - 1];
         }
-        String newName = UUIDUtils.getUUID32() + "." +suffix;
+        String newName = UUIDUtils.getUUID32() + "." + suffix;
         String fileUrl = "";
-        if(type == 0)
-        {
+        if (type == 0) {
             fileUrl = filePath + newName;
-        }
-        else if (type == 1)
-        {
+        } else if (type == 1) {
             fileUrl = picturePath + newName;
         }
         InputStream is = file.getInputStream();
@@ -51,7 +48,7 @@ public class FileController {
         is.close();
         out.close();
         resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);
-        resultJsonVO.addInfo("/image/"+newName);
+        resultJsonVO.addInfo("/image/" + newName);
         return resultJsonVO;
     }
 

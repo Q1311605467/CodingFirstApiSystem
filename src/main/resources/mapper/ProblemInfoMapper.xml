@@ -111,4 +111,15 @@
 	    t_problem_info
 	    WHERE problem_id = #{problemId}
     </select>
+
+    <select id="queryUserUnSolvedProblemsByUsername" resultType="com.fjut.cf.pojo.po.ProblemInfoPO">
+        SELECT * FROM t_problem_info tpi
+        WHERE  problem_id NOT IN
+        (
+            SELECT problem_id
+            FROM t_user_problem_solved tps
+            WHERE solved_count > 0
+            AND tps.username = #{username}
+        );
+    </select>
 </mapper>

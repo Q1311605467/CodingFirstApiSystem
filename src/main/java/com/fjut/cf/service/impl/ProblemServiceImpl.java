@@ -109,7 +109,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 
     @Override
-    public List<UserRadarVO> queryUserProblemRadar(String username) {
+    public List<UserRadarVO> queryUserProblemRadarByUsername(String username) {
         List<ProblemTypeCountPO> problemTypeCounts = problemDifficultMapper.queryProblemTypeCount();
         List<ProblemTypeCountPO> userProblemTypeCounts = userProblemSolvedMapper.queryProblemTypeCountByUsername(username);
 
@@ -133,5 +133,35 @@ public class ProblemServiceImpl implements ProblemService {
             results.add(userRadarVO);
         }
         return results;
+    }
+
+    @Override
+    public List<ProblemInfoPO> queryRecommendProblemsByUsername(String username) {
+        List<ProblemInfoPO> problemInfoPOS = problemInfoMapper.queryUserUnSolvedProblemsByUsername(username);
+        List<ProblemInfoPO> results = new ArrayList<>();
+        int totalUnsolved = problemInfoPOS.size();
+        // 如果用户未解决题目小于3，则直接返回推荐题目内容
+        if(totalUnsolved <=3)
+        {
+            return problemInfoPOS;
+        }
+        // 如果大于3道，随机推荐3道
+        // TODO: 可以做更多的操作
+        Random random = new Random();
+        Set<Integer> set = new TreeSet<>();
+        while(true)
+        {
+            int randomInt = random.nextInt(totalUnsolved);
+            set.add(randomInt);
+            if(set.size()==3)
+            {
+                break;
+            }
+        }
+        for (Integer i : set) {
+            results.add(problemInfoPOS.get(i));
+        }
+        return results;
+
     }
 }

@@ -59,6 +59,8 @@ public interface ProblemService {
      * @param username
      * @return
      */
-    List<UserRadarVO> queryUserProblemRadar(String username);
+    List<UserRadarVO> queryUserProblemRadarByUsername(String username);
+
+    List<ProblemInfoPO> queryRecommendProblemsByUsername(String username);
 
 }

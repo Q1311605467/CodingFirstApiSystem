@@ -23,7 +23,7 @@ public class ProblemTagController {
     ProblemTagService problemTagService;
 
     @GetMapping("/get")
-    public ResultJsonVO getAllProblemTag(){
+    public ResultJsonVO getAllProblemTag() {
         ResultJsonVO resultJsonVO = new ResultJsonVO();
         List<ProblemTagPO> problemTagPOS = problemTagService.queryAllProblemTag();
         resultJsonVO.setStatus(ResultJsonCode.REQUIRED_SUCCESS);

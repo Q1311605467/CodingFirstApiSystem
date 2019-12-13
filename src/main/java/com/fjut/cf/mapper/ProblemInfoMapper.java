@@ -84,4 +84,11 @@ public interface ProblemInfoMapper {
      */
     ProblemInfoPO queryProblemInfoByProblemId(@Param("problemId") Integer problemId);
 
+    /**
+     * 查询用户未解决的题目列表
+     * @param username
+     * @return
+     */
+    List<ProblemInfoPO> queryUserUnSolvedProblemsByUsername(@Param("username") String username);
+
 }

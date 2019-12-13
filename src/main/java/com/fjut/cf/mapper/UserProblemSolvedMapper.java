@@ -81,7 +81,6 @@ public interface UserProblemSolvedMapper {
     Integer queryUserProblemSolvedCountByUsernameAndProblemId(@Param("username") String username, @Param("problemId") Integer problemId);
 
 
-
     /**
      * 查询用户完成题目中的题目类型总计
      * @return

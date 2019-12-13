@@ -67,8 +67,7 @@ public class UserController {
             return resultJsonVO;
         }
         Integer integer = userAuthService.queryUserAuthLockedByUsername(username);
-        if (integer == 1)
-        {
+        if (integer == 1) {
             resultJsonVO.setStatus(ResultJsonCode.BUSINESS_FAIL, "您的账号还未激活，请到邮箱中点击激活！");
             return resultJsonVO;
         }
