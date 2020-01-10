@@ -25,7 +25,7 @@
 ## 使用说明
 
 1. 下载并安装Idea，配置好开发环境，安装相关的插件
-2. 下载并安装maven
+2. 下载并安装maven(不是必要)
 3. 下载Spring-2.0.0.M5 SpringBoot工具
 3. 下载并安装MySQL 8.0.15和MySQL可视化工具，项目运行时保持MySQL链接正常
 4. 下载并安装Redis 3.2.100，项目运行时保持Redis Server在本地开启
